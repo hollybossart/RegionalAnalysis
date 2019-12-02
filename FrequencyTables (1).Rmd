@@ -1,0 +1,265 @@
+---
+title: "Frequency Tables"
+author: "Deric Liang"
+date: "28 June 2019"
+output:
+  pdf_document: default
+  html_notebook: default
+---
+
+# Front Matter
+
+```{r include = FALSE, results='hide'}
+# libraries
+library(tidyverse)
+library(survey)
+library(data.table)
+library(mosaic)
+```
+
+```{r}
+# read data
+cidi_raw <-
+  fread("ukrmain_RU_061419.csv")
+```
+
+```{r}
+# REPRODUCING THE FOUR CORE CONDITIONS; REGION VARIABLE; RELIGION GROUPING
+cidi <-
+  cidi_raw %>%
+  filter(!is.na(de40)) %>%
+  # religion
+  mutate(de32_1 = ifelse(is.na(de32_1), 0, 1),
+         de32_2 = ifelse(is.na(de32_2), 0, 1),
+         de32_9 = ifelse(is.na(de32_9), 0, 1),
+         de32_98 = ifelse(is.na(de32_98), 0, 1),
+         de32_99 = ifelse(is.na(de32_99), 0, 1),
+         de32_other = ifelse(de32_3|de32_4|de32_5|de32_6|de32_7|de32_8 == 1, 1, 0),
+         de32_other = ifelse(is.na(de32_other), 0, 1),
+         de34 = as.factor(ifelse(de34 == 8 | de34 == 9, 0, de34))) %>%
+  # mental conditions
+  mutate(affected_cher = ifelse(!is.na(dm40), dm40, de40),
+         anx = ifelse(DSM_AGO == 1|DSM_SO == 1|DSM_GAD == 1|DSM_PDS == 1, 1, 0),
+         ied = ifelse(DSM_IEDH == 1, 1, 0),
+         aff = ifelse(DSM_MDE == 1|DSM_DYS == 1, 1, 0),
+         alc = ifelse(DSM_ALA == 1|DSM_ALD == 1, 1, 0),
+         any = ifelse(anx == 1|ied == 1|aff == 1|alc == 1, 1, 0),
+         oblast = as.factor(io15)) %>%
+  # 8 region variable
+  mutate(region8 = derivedFactor(East = io15 == 7|io15 == 13,
+                                 Eastcentral = io15 == 21|io15 == 10|io15 == 6,
+                                 Krym = io15 == 1,
+                                 South = io15 == 22|io15 == 15|io15 == 16,
+                                 Northcentral = io15 == 26|io15 == 19|io15 == 17|io15 == 24|io15 == 12|io15 == 2|io15 == 3,
+                                 Westcentral = io15 == 23|io15 == 8|io15 == 4|io15 == 18|io15 == 5,
+                                 West = io15 == 11|io15 == 14|io15 == 20,
+                                 Southwest = io15 == 25|io15 == 9)) %>%
+  select(sampleid, affected_cher, anx, ied, aff, alc, any, 
+         de32_1, de32_2, de32_other, de32_98, de32_99, oblast, region8,
+         secu, strata, weight2)
+```
+
+```{r}
+# Dataset with Part 2 weights on
+DesignPt2 <-
+  svydesign(ids = ~secu, strata = ~strata, weights = ~weight2, nest = T, 
+            data = subset(cidi, cidi$weight2>0))
+options(survey.lonely.psu = "adjust")
+```
+
+# Prevalence of Disorders by 8 Regions Grouping
+
+While the 8-region grouping in the Barrington and Herron paper makes sense and is explained well, I am concerned that this creates insufficient sample sizes for those with mental disorders in each region.
+
+```{r}
+# anx
+# svyglm(anx~oblast, design = DesignPt2, family = quasibinomial()) %>%
+#   summary
+svytable(~anx + region8, design = DesignPt2) %>%
+  addmargins %>%
+  round()
+```
+
+```{r}
+# alc
+# svyglm(alc~oblast, design = DesignPt2, family = quasibinomial()) %>%
+#   summary
+svytable(~alc + region8, design = DesignPt2) %>%
+  addmargins %>%
+  round()
+```
+
+```{r}
+# aff
+# svyglm(aff~oblast, design = DesignPt2, family = quasibinomial()) %>%
+#   summary
+svytable(~aff + region8, design = DesignPt2) %>%
+  addmargins %>%
+  round()
+```
+
+```{r}
+# ied
+# svyglm(ied~oblast, design = DesignPt2, family = quasibinomial()) %>%
+#   summary
+svytable(~ied + region8, design = DesignPt2) %>%
+  addmargins %>%
+  round()
+```
+
+```{r}
+# any
+# svyglm(any~oblast, design = DesignPt2, family = quasibinomial()) %>%
+#   summary
+svytable(~any + region8, design = DesignPt2) %>%
+  addmargins() %>%
+  round()
+```
+
+
+# Prevalence of Disorders By Oblast
+
+```{r}
+# anx
+# svyglm(anx~oblast, design = DesignPt2, family = quasibinomial()) %>%
+#   summary
+svytable(~anx + oblast, design = DesignPt2) %>%
+  addmargins %>%
+  round()
+```
+
+```{r}
+# alc
+# svyglm(alc~oblast, design = DesignPt2, family = quasibinomial()) %>%
+#   summary
+svytable(~alc + oblast, design = DesignPt2) %>%
+  addmargins %>%
+  round()
+```
+
+```{r}
+# aff
+# svyglm(aff~oblast, design = DesignPt2, family = quasibinomial()) %>%
+#   summary
+svytable(~aff + oblast, design = DesignPt2) %>%
+  addmargins %>%
+  round()
+```
+
+```{r}
+# ied
+# svyglm(ied~oblast, design = DesignPt2, family = quasibinomial()) %>%
+#   summary
+svytable(~ied + oblast, design = DesignPt2) %>%
+  addmargins %>%
+  round()
+```
+
+```{r}
+# any
+# svyglm(any~oblast, design = DesignPt2, family = quasibinomial()) %>%
+#   summary
+svytable(~any + oblast, design = DesignPt2) %>%
+  addmargins() %>%
+  round()
+```
+
+# Frequency Counts of Mental Disorders
+
+```{r}
+# mental disorder frequency counts
+svytable(~anx, design = DesignPt2) %>%
+  addmargins() %>%
+  round()
+svytable(~aff, design = DesignPt2) %>%
+  addmargins() %>%
+  round()
+svytable(~alc, design = DesignPt2) %>%
+  addmargins() %>%
+  round()
+svytable(~ied, design = DesignPt2) %>%
+  addmargins() %>%
+  round()
+svytable(~any, design = DesignPt2) %>%
+  addmargins() %>%
+  round()
+```
+
+# Mental Disorders by Religion
+
+```{r}
+# anxiety and religion
+svytable(~anx + de32_1, design = DesignPt2) %>%
+  addmargins() %>%
+  round()
+svytable(~anx + de32_2, design = DesignPt2) %>%
+  addmargins() %>%
+  round()
+svytable(~anx + de32_other, design = DesignPt2) %>%
+  addmargins() %>%
+  round()
+```
+
+```{r}
+# affective and religion
+svytable(~aff + de32_1, design = DesignPt2) %>%
+  addmargins() %>%
+  round()
+svytable(~aff + de32_2, design = DesignPt2) %>%
+  addmargins() %>%
+  round()
+svytable(~aff + de32_other, design = DesignPt2) %>%
+  addmargins() %>%
+  round()
+```
+
+```{r}
+# alcohol and religion
+svytable(~alc + de32_1, design = DesignPt2) %>%
+  addmargins() %>%
+  round()
+svytable(~alc + de32_2, design = DesignPt2) %>%
+  addmargins() %>%
+  round()
+svytable(~alc + de32_other, design = DesignPt2) %>%
+  addmargins() %>%
+  round()
+```
+
+```{r}
+# ied and religion
+svytable(~ied + de32_1, design = DesignPt2) %>%
+  addmargins() %>%
+  round()
+svytable(~ied + de32_2, design = DesignPt2) %>%
+  addmargins() %>%
+  round()
+svytable(~ied + de32_other, design = DesignPt2) %>%
+  addmargins() %>%
+  round()
+```
+
+```{r}
+# any and religion
+svytable(~any + de32_1, design = DesignPt2) %>%
+  addmargins() %>%
+  round()
+svytable(~any + de32_2, design = DesignPt2) %>%
+  addmargins() %>%
+  round()
+svytable(~any + de32_other, design = DesignPt2) %>%
+  addmargins() %>%
+  round()
+```
+
+
+
+
+
+
+
+
+
+
+
+

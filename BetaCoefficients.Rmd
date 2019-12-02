@@ -1,0 +1,833 @@
+---
+title: "Exploratory Maps"
+output:
+  pdf_document: default
+  html_notebook: default
+---
+
+# Front Matter
+
+```{r results = FALSE, include = FALSE}
+# libraries
+library(maps)
+library(sf)
+library(data.table)
+library(tidyverse)
+library(haven)
+library(RColorBrewer)
+library(classInt)
+library(mosaic)
+library(sp)
+```
+
+```{r}
+# read data and shape files
+### map shape file
+ukroblast <-
+  st_read("ukraineGIS/gadm36_UKR_1.shp")
+### regional gdp data
+gdpraw <- 
+  fread("grossregionalproduct.csv")
+### exit poll 1999
+exit99 <-
+  read_sav("KIIS/Exit-poll1999/Exit-poll1999_1_eng.sav")
+### exit poll 2002
+exit02 <-
+  read_sav("KIIS/Exit-poll2002/Exitpoll2002_unicode.sav")
+### expectations 2002
+expect <-
+  read_sav("KIIS/Expectations2002/SOC_EXP_massive.sav")
+### gl2000
+gl2000 <-
+  read_sav("KIIS/GL2000/KIIS_public_opinion2000_ENG.sav")
+### national integrity 1998
+integrity <-
+  read_sav("KIIS/Integrity1998/KIIS_PSP_1998_UKR_unicode.sav")
+### omnibus nov 2002
+omn_nov02 <-
+  read_sav("KIIS/KIIS_OMN2002_nov/KIIS_omn2002nov_ENG.sav")
+### omnibus feb 2002
+omn_feb02 <-
+  read_sav("KIIS/Politika2002_feb2/KIIS-KCPIK_politika2002-feb2_RUS_unicode.sav")
+### views politika 2002
+views02 <-
+  read_sav("KIIS/Politika2002-feb1/KIIS-KCPIK_politika2002-feb1_RUS_unicode.sav")
+### usia1997
+usia97 <-
+  read_sav("KIIS/USIA1997/USIA1997_ENG.sav")
+### unicef
+unicef <-
+  read_sav("UNICEF/hh.sav")
+### CIDI data
+cidi_raw <-
+  fread("ukrmain_RU_061419.csv")
+```
+
+# Map Exploration
+
+```{r}
+### look at names
+ukroblast$NAME_1
+```
+
+# Data Aggregation
+
+```{r}
+# clean up GDP data, obtain variables of interest
+gdp <-
+  gdpraw[6:32] %>%
+  select(V1, V29)
+colnames(gdp) <-
+  c("Oblast", "PerCapitaGDP")
+gdp <-
+  gdp %>%
+  mutate(PerCapitaGDP = as.numeric(PerCapitaGDP))
+# how widespread is corruption?
+### taking proportion of people who answered 4: everyone is corrupt
+corruptionraw <-
+  table(gl2000$V237, gl2000$V45) %>%
+  addmargins() %>%
+  as.data.frame.matrix() %>%
+  # calcuates percent of people answering everyone is corrupt
+  mutate(all_corrupt = `4`/Sum) %>%
+  rownames_to_column()
+corruption <-
+  corruptionraw %>%
+  mutate(Oblast = derivedVariable("Crimea" = rowname == 1,
+                                "Kiev City" = rowname == 2,
+                                "Kiev" = rowname == 3,
+                                "Vinnytsya" = rowname == 4,
+                                "Volyn" = rowname == 5,
+                                "Dnipropetrovs'k" = rowname == 6,
+                                "Donets'k" = rowname == 7,
+                                "Zhytomyr" = rowname == 8,
+                                "Transcarpathia" = rowname == 9,
+                                "Zaporizhzhya" = rowname == 10,
+                                "Ivano-Fankivs'k" = rowname == 11,
+                                "Kirovohrad" = rowname == 12,
+                                "Luhans'k" = rowname == 13,
+                                "L'viv" = rowname == 14,
+                                "Mykolayiv" = rowname == 15,
+                                "Odessa" = rowname == 16,
+                                "Poltava" = rowname == 17,
+                                "Rivne" = rowname == 18,
+                                "Sumy" = rowname == 19,
+                                "Ternopil'" = rowname == 20,
+                                "Kharkiv" = rowname == 21,
+                                "Kherson" = rowname == 22,
+                                "Khmel'nyts'kyy" = rowname == 23,
+                                "Cherkasy" = rowname == 24,
+                                "Chernihiv" = rowname == 25,
+                                "Chernivtsi" = rowname == 26,
+                                "Sevastopol'" = rowname == 27)) %>%
+  select(Oblast, all_corrupt) %>%
+  arrange(Oblast)
+
+corruption$all_corrupt[20]<-
+  corruption$all_corrupt[4]
+
+# what language do you speak at home?
+### percent Ukrainian
+languageraw <-
+  table(gl2000$V237, gl2000$V108) %>%
+  addmargins() %>%
+  as.data.frame.matrix() %>%
+  # calculate percent of Ukrainian speakers
+  mutate(ukr = `1`/Sum) %>%
+  rownames_to_column()
+language <-
+  languageraw %>%
+  mutate(Oblast = derivedVariable("Crimea" = rowname == 1,
+                                "Kiev City" = rowname == 2,
+                                "Kiev" = rowname == 3,
+                                "Vinnytsya" = rowname == 4,
+                                "Volyn" = rowname == 5,
+                                "Dnipropetrovs'k" = rowname == 6,
+                                "Donets'k" = rowname == 7,
+                                "Zhytomyr" = rowname == 8,
+                                "Transcarpathia" = rowname == 9,
+                                "Zaporizhzhya" = rowname == 10,
+                                "Ivano-Fankivs'k" = rowname == 11,
+                                "Kirovohrad" = rowname == 12,
+                                "Luhans'k" = rowname == 13,
+                                "L'viv" = rowname == 14,
+                                "Mykolayiv" = rowname == 15,
+                                "Odessa" = rowname == 16,
+                                "Poltava" = rowname == 17,
+                                "Rivne" = rowname == 18,
+                                "Sumy" = rowname == 19,
+                                "Ternopil'" = rowname == 20,
+                                "Kharkiv" = rowname == 21,
+                                "Kherson" = rowname == 22,
+                                "Khmel'nyts'kyy" = rowname == 23,
+                                "Cherkasy" = rowname == 24,
+                                "Chernihiv" = rowname == 25,
+                                "Chernivtsi" = rowname == 26,
+                                "Sevastopol'" = rowname == 27)) %>%
+  select(Oblast, ukr) %>%
+  arrange(Oblast)
+
+# for which party or block have you voted?
+### percent "Our Ukraine"
+politicalraw <-
+  table(exit02$V4, exit02$V6) %>%
+  addmargins() %>%
+  as.data.frame.matrix() %>%
+  # percent "Our Ukraine" party
+  mutate(our_ukr = `2`/Sum) %>%
+  rownames_to_column()
+political <-
+  politicalraw %>%
+  mutate(Oblast = derivedVariable("Crimea" = rowname == 1,
+                                "Kiev City" = rowname == 2,
+                                "Kiev" = rowname == 3,
+                                "Vinnytsya" = rowname == 4,
+                                "Volyn" = rowname == 5,
+                                "Dnipropetrovs'k" = rowname == 6,
+                                "Donets'k" = rowname == 7,
+                                "Zhytomyr" = rowname == 8,
+                                "Transcarpathia" = rowname == 9,
+                                "Zaporizhzhya" = rowname == 10,
+                                "Ivano-Fankivs'k" = rowname == 11,
+                                "Kirovohrad" = rowname == 12,
+                                "Luhans'k" = rowname == 13,
+                                "L'viv" = rowname == 14,
+                                "Mykolayiv" = rowname == 15,
+                                "Odessa" = rowname == 16,
+                                "Poltava" = rowname == 17,
+                                "Rivne" = rowname == 18,
+                                "Sumy" = rowname == 19,
+                                "Ternopil'" = rowname == 20,
+                                "Kharkiv" = rowname == 21,
+                                "Kherson" = rowname == 22,
+                                "Khmel'nyts'kyy" = rowname == 23,
+                                "Cherkasy" = rowname == 24,
+                                "Chernihiv" = rowname == 25,
+                                "Chernivtsi" = rowname == 26,
+                                "Sevastopol'" = rowname == 27)) %>%
+  select(Oblast, our_ukr) %>%
+  arrange(Oblast)
+
+# is the necessary medical service available?
+### percent "not at all sure"
+medicalraw <-
+  table(expect$v121, expect$v48) %>%
+  addmargins() %>%
+  as.data.frame.matrix() %>%
+  # percent "not at all sure"
+  mutate(med_no = `5`/Sum) %>%
+  rownames_to_column()
+medical <-
+  medicalraw %>%
+  mutate(Oblast = derivedVariable("Crimea" = rowname == 1,
+                                "Kiev City" = rowname == 2,
+                                "Kiev" = rowname == 3,
+                                "Vinnytsya" = rowname == 4,
+                                "Volyn" = rowname == 5,
+                                "Dnipropetrovs'k" = rowname == 6,
+                                "Donets'k" = rowname == 7,
+                                "Zhytomyr" = rowname == 8,
+                                "Transcarpathia" = rowname == 9,
+                                "Zaporizhzhya" = rowname == 10,
+                                "Ivano-Fankivs'k" = rowname == 11,
+                                "Kirovohrad" = rowname == 12,
+                                "Luhans'k" = rowname == 13,
+                                "L'viv" = rowname == 14,
+                                "Mykolayiv" = rowname == 15,
+                                "Odessa" = rowname == 16,
+                                "Poltava" = rowname == 17,
+                                "Rivne" = rowname == 18,
+                                "Sumy" = rowname == 19,
+                                "Ternopil'" = rowname == 20,
+                                "Kharkiv" = rowname == 21,
+                                "Kherson" = rowname == 22,
+                                "Khmel'nyts'kyy" = rowname == 23,
+                                "Cherkasy" = rowname == 24,
+                                "Chernihiv" = rowname == 25,
+                                "Chernivtsi" = rowname == 26,
+                                "Sevastopol'" = rowname == 27)) %>%
+  select(Oblast, med_no) %>%
+  arrange(Oblast)
+
+# get used to 10 year changes?
+### percent "certainly succeeded"
+tenyearraw <-
+  table(omn_feb02$V64, omn_feb02$V5) %>%
+  addmargins() %>%
+  as.data.frame.matrix() %>%
+  # percent "certainly succeeded"
+  mutate(certainly10 = `1`/Sum) %>%
+  rownames_to_column()
+tenyear <-
+  tenyearraw %>%
+  mutate(Oblast = derivedVariable("Crimea" = rowname == 1,
+                                "Kiev City" = rowname == 2,
+                                "Kiev" = rowname == 3,
+                                "Vinnytsya" = rowname == 4,
+                                "Volyn" = rowname == 5,
+                                "Dnipropetrovs'k" = rowname == 6,
+                                "Donets'k" = rowname == 7,
+                                "Zhytomyr" = rowname == 8,
+                                "Transcarpathia" = rowname == 9,
+                                "Zaporizhzhya" = rowname == 10,
+                                "Ivano-Fankivs'k" = rowname == 11,
+                                "Kirovohrad" = rowname == 12,
+                                "Luhans'k" = rowname == 13,
+                                "L'viv" = rowname == 14,
+                                "Mykolayiv" = rowname == 15,
+                                "Odessa" = rowname == 16,
+                                "Poltava" = rowname == 17,
+                                "Rivne" = rowname == 18,
+                                "Sumy" = rowname == 19,
+                                "Ternopil'" = rowname == 20,
+                                "Kharkiv" = rowname == 21,
+                                "Kherson" = rowname == 22,
+                                "Khmel'nyts'kyy" = rowname == 23,
+                                "Cherkasy" = rowname == 24,
+                                "Chernihiv" = rowname == 25,
+                                "Chernivtsi" = rowname == 26,
+                                "Sevastopol'" = rowname == 27)) %>%
+  select(Oblast, certainly10) %>%
+  arrange(Oblast)
+
+# religiosity
+### percent "very important"
+religionraw <-
+  table(usia97$V175, usia97$V154) %>%
+  addmargins() %>%
+  as.data.frame.matrix() %>%
+  # percent "very important"
+  mutate(rel_veryimp = `1`/Sum) %>%
+  rownames_to_column()
+religion <-
+  religionraw %>%
+  mutate(Oblast = derivedVariable("Crimea" = rowname == 1,
+                                "Kiev City" = rowname == 2,
+                                "Kiev" = rowname == 3,
+                                "Vinnytsya" = rowname == 4,
+                                "Volyn" = rowname == 5,
+                                "Dnipropetrovs'k" = rowname == 6,
+                                "Donets'k" = rowname == 7,
+                                "Zhytomyr" = rowname == 8,
+                                "Transcarpathia" = rowname == 9,
+                                "Zaporizhzhya" = rowname == 10,
+                                "Ivano-Fankivs'k" = rowname == 11,
+                                "Kirovohrad" = rowname == 12,
+                                "Luhans'k" = rowname == 13,
+                                "L'viv" = rowname == 14,
+                                "Mykolayiv" = rowname == 15,
+                                "Odessa" = rowname == 16,
+                                "Poltava" = rowname == 17,
+                                "Rivne" = rowname == 18,
+                                "Sumy" = rowname == 19,
+                                "Ternopil'" = rowname == 20,
+                                "Kharkiv" = rowname == 21,
+                                "Kherson" = rowname == 22,
+                                "Khmel'nyts'kyy" = rowname == 23,
+                                "Cherkasy" = rowname == 24,
+                                "Chernihiv" = rowname == 25,
+                                "Chernivtsi" = rowname == 26,
+                                "Sevastopol'" = rowname == 27)) %>%
+  select(Oblast, rel_veryimp) %>%
+  arrange(Oblast)
+
+# economic attitude, oblast
+### how would you assess the economic situation in your city? percent saying very bad
+econraw <-
+  table(gl2000$V237, gl2000$V113) %>%
+  addmargins() %>%
+  as.data.frame.matrix() %>%
+  # percent "very bad"
+  mutate(econ_bad = `5`/Sum) %>%
+  rownames_to_column()
+econ <-
+  econraw %>%
+  mutate(Oblast = derivedVariable("Crimea" = rowname == 1,
+                                "Kiev City" = rowname == 2,
+                                "Kiev" = rowname == 3,
+                                "Vinnytsya" = rowname == 4,
+                                "Volyn" = rowname == 5,
+                                "Dnipropetrovs'k" = rowname == 6,
+                                "Donets'k" = rowname == 7,
+                                "Zhytomyr" = rowname == 8,
+                                "Transcarpathia" = rowname == 9,
+                                "Zaporizhzhya" = rowname == 10,
+                                "Ivano-Fankivs'k" = rowname == 11,
+                                "Kirovohrad" = rowname == 12,
+                                "Luhans'k" = rowname == 13,
+                                "L'viv" = rowname == 14,
+                                "Mykolayiv" = rowname == 15,
+                                "Odessa" = rowname == 16,
+                                "Poltava" = rowname == 17,
+                                "Rivne" = rowname == 18,
+                                "Sumy" = rowname == 19,
+                                "Ternopil'" = rowname == 20,
+                                "Kharkiv" = rowname == 21,
+                                "Kherson" = rowname == 22,
+                                "Khmel'nyts'kyy" = rowname == 23,
+                                "Cherkasy" = rowname == 24,
+                                "Chernihiv" = rowname == 25,
+                                "Chernivtsi" = rowname == 26,
+                                "Sevastopol'" = rowname == 27)) %>%
+  select(Oblast, econ_bad) %>%
+  arrange(Oblast)
+
+# environmental concerns, oblast
+### percent concerned about air pollution
+environmentraw <-
+  table(usia97$V175, usia97$V107) %>%
+  addmargins() %>%
+  as.data.frame.matrix() %>%
+  # calculate percent
+  mutate(air_concern = `2`/Sum) %>%
+  rownames_to_column()
+environment <-
+  environmentraw %>%
+  mutate(Oblast = derivedVariable("Crimea" = rowname == 1,
+                                "Kiev City" = rowname == 2,
+                                "Kiev" = rowname == 3,
+                                "Vinnytsya" = rowname == 4,
+                                "Volyn" = rowname == 5,
+                                "Dnipropetrovs'k" = rowname == 6,
+                                "Donets'k" = rowname == 7,
+                                "Zhytomyr" = rowname == 8,
+                                "Transcarpathia" = rowname == 9,
+                                "Zaporizhzhya" = rowname == 10,
+                                "Ivano-Fankivs'k" = rowname == 11,
+                                "Kirovohrad" = rowname == 12,
+                                "Luhans'k" = rowname == 13,
+                                "L'viv" = rowname == 14,
+                                "Mykolayiv" = rowname == 15,
+                                "Odessa" = rowname == 16,
+                                "Poltava" = rowname == 17,
+                                "Rivne" = rowname == 18,
+                                "Sumy" = rowname == 19,
+                                "Ternopil'" = rowname == 20,
+                                "Kharkiv" = rowname == 21,
+                                "Kherson" = rowname == 22,
+                                "Khmel'nyts'kyy" = rowname == 23,
+                                "Cherkasy" = rowname == 24,
+                                "Chernihiv" = rowname == 25,
+                                "Chernivtsi" = rowname == 26,
+                                "Sevastopol'" = rowname == 27)) %>%
+  select(Oblast, air_concern) %>%
+  arrange(Oblast)
+
+
+# CIDI data clean up and calculating proportions by each oblast
+cidi <-
+  cidi_raw %>%
+  filter(!is.na(de40)) %>%
+  
+  # mental conditions
+  mutate(anx = ifelse(DSM_AGO == 1|DSM_SO == 1|DSM_GAD == 1|DSM_PDS == 1, 1, 0),
+         ied = ifelse(DSM_IEDH == 1, 1, 0),
+         aff = ifelse(DSM_MDE == 1|DSM_DYS == 1, 1, 0),
+         alc = ifelse(DSM_ALA == 1|DSM_ALD == 1, 1, 0),
+         any = ifelse(anx == 1|ied == 1|aff == 1|alc == 1, 1, 0),
+         Oblast = derivedVariable("Crimea" = io15 == 1,
+                                "Kiev City" = io15 == 2,
+                                "Kiev" = io15 == 3,
+                                "Vinnytsya" = io15 == 4,
+                                "Volyn" = io15 == 5,
+                                "Dnipropetrovs'k" = io15 == 6,
+                                "Donets'k" = io15 == 7,
+                                "Zhytomyr" = io15 == 8,
+                                "Transcarpathia" = io15 == 9,
+                                "Zaporizhzhya" = io15 == 10,
+                                "Ivano-Fankivs'k" = io15 == 11,
+                                "Kirovohrad" = io15 == 12,
+                                "Luhans'k" = io15 == 13,
+                                "L'viv" = io15 == 14,
+                                "Mykolayiv" = io15 == 15,
+                                "Odessa" = io15 == 16,
+                                "Poltava" = io15 == 17,
+                                "Rivne" = io15 == 18,
+                                "Sumy" = io15 == 19,
+                                "Ternopil'" = io15 == 20,
+                                "Kharkiv" = io15 == 21,
+                                "Kherson" = io15 == 22,
+                                "Khmel'nyts'kyy" = io15 == 23,
+                                "Cherkasy" = io15 == 24,
+                                "Chernihiv" = io15 == 25,
+                                "Chernivtsi" = io15 == 26),
+         x = 1) %>% #placeholder to help add up all of the people in that Oblast
+  group_by(Oblast) %>%
+  summarize(totalpop = sum(x),
+            anx = sum(anx),
+            ied = sum(ied),
+            aff = sum(aff),
+            alc = sum(alc),
+            any = sum(any)) %>%
+  select(Oblast, anx, ied, aff, alc, any, totalpop) %>%
+  mutate(anx_prop = anx/totalpop,
+         ied_prop = ied/totalpop,
+         aff_prop = aff/totalpop,
+         alc_prop = alc/totalpop,
+         any_prop = any/totalpop)
+
+
+# Create one large data set by joining with oblasts
+
+combined.data =
+  cidi %>%
+  inner_join(corruption, by = "Oblast")  
+
+##TODO: join all other data sets with the cidi data to make a large master data set by oblast
+
+```
+
+
+
+### Barrington's 8 Region Map
+
+```{r}
+# categorize oblasts into Barrington's 8 regions
+ukroblast$region8 <-
+  derivedFactor(East = ukroblast$NAME_1 == "Donets'k"|ukroblast$NAME_1 == "Luhans'k",
+                Eastcentral = ukroblast$NAME_1 == "Kharkiv"|ukroblast$NAME_1 == "Zaporizhzhya"|
+                  ukroblast$NAME_1 == "Dnipropetrovs'k",
+                Krym = ukroblast$NAME_1 == "Crimea"|ukroblast$NAME_1 == "Sevastopol'",
+                South = ukroblast$NAME_1 == "Kherson"|ukroblast$NAME_1 == "Mykolayiv"|ukroblast$NAME_1 == "Odessa",
+                Northcentral = ukroblast$NAME_1 == "Chernihiv"|ukroblast$NAME_1 == "Sumy"|
+                  ukroblast$NAME_1 == "Poltava"|ukroblast$NAME_1 == "Cherkasy"|ukroblast$NAME_1 == "Kirovohrad"|
+                  ukroblast$NAME_1 == "Kiev"|ukroblast$NAME_1 == "Kiev City",
+                Westcentral = ukroblast$NAME_1 == "Khmel'nyts'kyy"|ukroblast$NAME_1 == "Zhytomyr"|
+                  ukroblast$NAME_1 == "Vinnytsya"|ukroblast$NAME_1 == "Rivne"|ukroblast$NAME_1 == "Volyn",
+                West = ukroblast$NAME_1 == "Ivano-Frankivs'k"|ukroblast$NAME_1 == "L'viv"|ukroblast$NAME_1 == "Ternopil'",
+                Southwest = ukroblast$NAME_1 == "Chernivtsi"|ukroblast$NAME_1 == "Transcarpathia")
+
+# plot data
+ggplot(data = ukroblast, aes(fill = region8)) +
+  geom_sf() +
+  labs(title = "Barrington's 8 Region Classification",
+       fill = "Regions") +
+  theme(panel.grid.major = element_blank(), 
+        panel.grid.minor = element_blank())
+```
+
+### GDP Per Capita (2004)
+
+```{r}
+# find bins, visualize
+quantile(gdp$PerCapitaGDP)
+ggplot(gdp, aes(x = PerCapitaGDP)) +
+  geom_histogram() +
+  geom_vline(xintercept = 4735.5) +
+  geom_vline(xintercept = 5163.0) +
+  geom_vline(xintercept = 6840.0)
+
+# bin GDP per capita data, add to shape file
+gdp2 <-
+  gdp %>%
+  mutate(GDPcapita = derivedFactor("< 4740" = PerCapitaGDP < 4740, 
+                                   "4740-5160" = PerCapitaGDP >= 4740 & PerCapitaGDP < 5160,
+                                   "5160-6840" = PerCapitaGDP >= 5160 & PerCapitaGDP < 6840, 
+                                   "> 6840" = PerCapitaGDP >= 6840),
+         Oblast = ifelse(Oblast == "Autonomous Republic of Crimea", "Crimea", 
+                  ifelse(Oblast == "Dnipropetrovsk", "Dnipropetrovs'k",
+                  ifelse(Oblast == "Donetsk", "Donets'k",
+                  ifelse(Oblast == "Ivano-Frankivsk", "Ivano-Frankivs'k",
+                  ifelse(Oblast == "Khmelnytskiy", "Khmel'nyts'kyy",
+                  ifelse(Oblast == "Kyiv" & PerCapitaGDP == 23130, "Kiev City",
+                  ifelse(Oblast == "Kyiv" & PerCapitaGDP == 6652, "Kiev",
+                  ifelse(Oblast == "Lviv", "L'viv",
+                  ifelse(Oblast == "Luhansk", "Luhans'k",
+                  ifelse(Oblast == "Odesa", "Odessa",
+                  ifelse(Oblast == "Sevastopol", "Sevastopol'",
+                  ifelse(Oblast == "Ternopil", "Ternopil'",
+                  ifelse(Oblast == "Zakarpattya", "Transcarpathia", Oblast)))))))))))))) %>%
+  select(Oblast, GDPcapita) %>%
+  arrange(Oblast)
+ukroblast$percapitaGDP <-
+  gdp2$GDPcapita
+remove(gdp2)
+
+# plot
+ggplot(data = ukroblast, aes(fill = percapitaGDP)) +
+  geom_sf() +
+  labs(title = "Per Capita GDP",
+       fill = "GDP per Capita") +
+  theme(panel.grid.major = element_blank(), 
+        panel.grid.minor = element_blank())
+
+
+# TODO: beta coefficient calculation for each oblast regressing disorder prevalence on gdp
+
+
+```
+
+### Proportion who think everyone is corrupt
+
+```{r}
+# find bins, visualize
+quantile(corruption$all_corrupt)
+ggplot(corruption, aes(x = all_corrupt)) +
+  geom_histogram() +
+  geom_vline(xintercept = 0.3222) +
+  geom_vline(xintercept = 0.3846) +
+  geom_vline(xintercept = 0.5172)
+
+# bin data, add to shape file
+corruption2 <-
+  corruption %>%
+  mutate(corrupt_bin = derivedFactor("< 0.32" = all_corrupt < 0.32,
+                                     "0.32-0.38" = all_corrupt >= 0.32 & all_corrupt < 0.38,
+                                     "0.38-0.51" = all_corrupt >= 0.38 & all_corrupt < 0.51,
+                                     "> 0.51" = all_corrupt >= 0.51))
+ukroblast$all_corrupt <-
+  corruption2$corrupt_bin
+remove(corruption2)
+
+# plot
+ggplot(data = ukroblast, aes(fill = all_corrupt)) +
+  geom_sf() +
+  labs(title = "Proportion who think everyone is corrupt",
+       fill = "Proportion") +
+  theme(panel.grid.major = element_blank(), 
+        panel.grid.minor = element_blank())
+
+# TODO: beta coefficient calculation for each oblast regressing disorder prevalence on corruption
+
+```
+
+
+### Proportion speaking Ukrainian at home
+
+```{r}
+# find bins, visualize
+quantile(language$ukr)
+ggplot(language, aes(x = ukr)) +
+  geom_histogram() +
+  geom_vline(xintercept = 0.2870) +
+  geom_vline(xintercept = 0.6111) +
+  geom_vline(xintercept = 0.8882)
+
+# bin data, add to shape file
+language2 <-
+  language %>%
+  mutate(ukr_bin = derivedFactor("< 0.29" = ukr < 0.29,
+                                 "0.29-0.61" = ukr >= 0.29 & ukr < 0.61,
+                                 "0.61-0.88" = ukr >= 0.61 & ukr < 0.88,
+                                 "> 0.88" = ukr >= 0.88))
+ukroblast$ukrlang <-
+  language2$ukr_bin
+remove(language2)
+
+# plot
+ggplot(data = ukroblast, aes(fill = ukrlang)) +
+  geom_sf() +
+  labs(title = "Proportion who speak Ukrainian at home",
+       fill = "Proportion") +
+  theme(panel.grid.major = element_blank(), 
+        panel.grid.minor = element_blank())
+
+# TODO: beta coefficient calculation for each oblast regressing disorder prevalence on proportion who speak ukr at home
+
+```
+
+### Voting Patterns - Proportion voting for "Our Ukraine"
+
+```{r}
+# find bins, visualize
+quantile(political$our_ukr)
+ggplot(political, aes(x = our_ukr)) +
+  geom_histogram() +
+  geom_vline(xintercept = 0.0813) +
+  geom_vline(xintercept = 0.25) +
+  geom_vline(xintercept = 0.3986)
+
+# bin data, add to shape file
+political2 <-
+  political %>%
+  mutate(ukr_bin = derivedFactor("< 0.09" = our_ukr < 0.09,
+                                 "0.09-0.25" = our_ukr >= 0.09 & our_ukr < 0.25,
+                                 "0.25-0.40" = our_ukr >= 0.25 & our_ukr < 0.40,
+                                 "> 0.40" = our_ukr >= 0.40))
+ukroblast$our_ukr <-
+  political2$ukr_bin
+remove(political2)
+
+# plot
+ggplot(data = ukroblast, aes(fill = our_ukr)) +
+  geom_sf() +
+  labs(title = "Proportion voting for 'Our Ukraine' Party",
+       fill = "Proportion") +
+  theme(panel.grid.major = element_blank(), 
+        panel.grid.minor = element_blank())
+
+# TODO: beta coefficient calculation for each oblast regressing disorder prevalence on pol party
+```
+
+### Is necessary medical service availabe? Proportion who say no
+
+```{r}
+# find bins, visualize
+quantile(medical$med_no)
+ggplot(medical, aes(x = med_no)) +
+  geom_histogram() +
+  geom_vline(xintercept = 0.1914) +
+  geom_vline(xintercept = 0.2295) +
+  geom_vline(xintercept = 0.3361)
+
+# bin data, add to shape file
+medical2 <-
+  medical %>%
+  mutate(bin = derivedFactor("< 0.20" = med_no < 0.20,
+                             "0.20-0.23" = med_no >= 0.20 & med_no < 0.23,
+                             "0.23-0.34" = med_no >= 0.23 & med_no < 0.34,
+                             "> 0.34" = med_no >= 0.34))
+ukroblast$med_no <-
+  medical2$bin
+remove(medical2)
+
+# plot
+ggplot(data = ukroblast, aes(fill = med_no)) +
+  geom_sf() +
+  labs(title = "Proportion who think necessary medical service is not available",
+       fill = "Proportion") +
+  theme(panel.grid.major = element_blank(), 
+        panel.grid.minor = element_blank())
+
+# TODO: beta coefficient calculation for each oblast regressing disorder prevalence on med service availability
+
+```
+
+### How successful were you to adapting to changes in the past 10 year? Proportion - certainly successful
+
+```{r}
+# find bins, visualize
+quantile(tenyear$certainly10)
+ggplot(tenyear, aes(x = certainly10)) +
+  geom_histogram() +
+  geom_vline(xintercept = 0.0356) +
+  geom_vline(xintercept = 0.0846) +
+  geom_vline(xintercept = 0.1061)
+
+# bin data, add to shape file
+tenyear2 <-
+  tenyear %>%
+  mutate(bin = derivedFactor("< 0.04" = certainly10 < 0.04,
+                             "0.04-0.08" = certainly10 >= 0.04 & certainly10 < 0.08,
+                             "0.08-0.10" = certainly10 >= 0.08 & certainly10 < 0.1,
+                             "> 0.10" = certainly10 >= 0.1))
+ukroblast$certainly10 <-
+  tenyear2$bin
+remove(tenyear2)
+
+# plot
+ggplot(data = ukroblast, aes(fill = certainly10)) +
+  geom_sf() +
+  labs(title = "Proportion who were certainly successful in adapting to 10 year changes",
+       fill = "Proportion") +
+  theme(panel.grid.major = element_blank(), 
+        panel.grid.minor = element_blank())
+
+# TODO: beta coefficient calculation for each oblast regressing disorder prevalence on adaptability
+
+```
+
+### Proportion saying religion is very important
+
+```{r}
+# find bins, visualize
+quantile(religion$rel_veryimp)
+ggplot(religion, aes(x = rel_veryimp)) +
+  geom_histogram() +
+  geom_vline(xintercept = 0.1262) +
+  geom_vline(xintercept = 0.2188) +
+  geom_vline(xintercept = 0.3117)
+
+# bin data, add to shape file
+religion2 <-
+  religion %>%
+  mutate(bin = derivedFactor("< 0.13" = rel_veryimp < 0.13,
+                             "0.13-0.22" = rel_veryimp >= 0.13 & rel_veryimp < 0.22,
+                             "0.22-0.31" = rel_veryimp >= 0.22 & rel_veryimp < 0.31,
+                             "> 0.31" = rel_veryimp >= 0.31))
+ukroblast$rel_veryimp <-
+  religion2$bin
+remove(religion2)
+
+# plot
+ggplot(data = ukroblast, aes(fill = rel_veryimp)) +
+  geom_sf() +
+  labs(title = "Proportion who think religion is very important",
+       fill = "Proportion") +
+  theme(panel.grid.major = element_blank(), 
+        panel.grid.minor = element_blank())
+
+# TODO: beta coefficient calculation for each oblast regressing disorder prevalence on importance of religion
+
+```
+
+### Economic Attitude - Proportion thinking economic situation in their city is very bad
+
+```{r}
+# find bins, visualize
+quantile(econ$econ_bad)
+ggplot(econ, aes(x = econ_bad)) +
+  geom_histogram() +
+  geom_vline(xintercept = 0.3096) +
+  geom_vline(xintercept = 0.4222) +
+  geom_vline(xintercept = 0.5759)
+
+# bin data, add to shape file
+econ2 <-
+  econ %>%
+  mutate(bin = derivedFactor("< 0.31" = econ_bad < 0.31,
+                             "0.31-0.42" = econ_bad >= 0.31 & econ_bad < 0.42,
+                             "0.42-0.58" = econ_bad >= 0.42 & econ_bad < 0.58,
+                             "> 0.58" = econ_bad >= 0.58))
+ukroblast$econ_bad <-
+  econ2$bin
+remove(econ2)
+
+# plot
+ggplot(data = ukroblast, aes(fill = econ_bad)) +
+  geom_sf() +
+  labs(title = "Proportion thinking economic situation in their city is very bad",
+       fill = "Proportion") +
+  theme(panel.grid.major = element_blank(), 
+        panel.grid.minor = element_blank())
+
+# TODO: beta coefficient calculation for each oblast regressing disorder prevalence on econ attitudes
+
+```
+
+### Environmental - Proportion concerned about air pollution
+
+```{r}
+# find bins, visualize
+quantile(environment$air_concern)
+ggplot(environment, aes(x = air_concern)) +
+  geom_histogram() +
+  geom_vline(xintercept = 0.1183) +
+  geom_vline(xintercept = 0.1667) +
+  geom_vline(xintercept = 0.2501)
+
+# bin data, add to shape file
+environment2 <-
+  environment %>%
+  mutate(bin = derivedFactor("< 0.12" = air_concern < 0.12,
+                             "0.12-0.17" = air_concern >= 0.12 & air_concern < 0.17,
+                             "0.17-0.25" = air_concern >= 0.17 & air_concern < 0.25,
+                             "> 0.25" = air_concern >= 0.25))
+ukroblast$air_concern <-
+  environment2$bin
+remove(environment2)
+
+# plot
+ggplot(data = ukroblast, aes(fill = air_concern)) +
+  geom_sf() +
+  labs(title = "Proportion who are concerned about air pollution",
+       fill = "Proportion") +
+  theme(panel.grid.major = element_blank(), 
+        panel.grid.minor = element_blank())
+
+# TODO: beta coefficient calculation for each oblast regressing disorder prevalence on air pollution
+
+```
+
+
+

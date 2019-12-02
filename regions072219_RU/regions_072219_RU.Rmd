@@ -1,0 +1,126 @@
+---
+title: "Exploration of grouping regions by variables of interest in terms of mental health outcomes"
+author: "Rachel Ulrich"
+date: "July 22, 2019"
+output: word_document
+---
+
+```{r setup, include=FALSE}
+setwd("C:/Users/Rachel/Desktop/dordt2019")
+knitr::opts_chunk$set(echo = F, 
+                      warning = F, 
+                      message = F,
+                      error = F,
+                      eval = T,
+                      cache = F,
+                      options(warn = -1),
+                      dpi = 300)
+require(readxl)
+require(gridExtra)
+require(anytime)
+require(car)
+require(broom)
+require(kableExtra)
+require(tidyverse)
+require(survey)
+version
+citation("survey")
+citation("tidyverse")
+```
+
+```{r}
+diag <- read.csv("ukraine_dia.csv") %>% select(c(sampleid, DSM_IED, DSM_ALA, DSM_DRA, DSM_TBD, DSM_DYS, DSM_MDE, DSM_MND, DSM_AGO, DSM_GAD, DSM_PAT, DSM_PDS, DSM_PTS, DSM_SO))
+#dm2 and em8: 1 working now, 2 self-employed, 3 unemployed looking for work, 4 temporarily laid off, 5 retired, 6 homemaker, 7 student, 8 maternity leave, 9 illness/sick leave, 10 disabled, 11 other(specify) - cannot include 11, 98 dk, 99 rf
+#dm4a.1 and de20.1: 1 never started GE, 2 started GE, 3 mid-level GE, 4 full GE, 5 started HE, mid-level HE, full HE, 98 dk, 99 rf
+#dmf12 and fnu4: 1 not enough for food, 2 difficult to buy clothes/shoes, 3 not enough for durables, 4 can afford some expensive things, 5 can afford anything, 8 dk, 9 rf
+#sc3 are you currently married? 1 yes 5 no 7 living with someone 8 dk 9 rf
+#sc3a are you currently living with someone in a marriage-like relationship? 1 yes, 5 no, 8 dk, 9 rf
+#sr1a:sr1g psychiatrist/narcologist=a; other mental health pro=b; family doctor=c; other medical doctor=d; other health pro/feldsher=e; religious/spiritual adviosr=f; other healer=g
+#cc8 number of chronic conditions reported in last 12 months
+#de34 1/2=very/somewhat important religious beliefs; 3/4 not very/not at all important religious/spiritual beliefs to daily life
+#de38 ladder community standing, define community in way most meaningful to respondent, rank yourself - 10 top of ladder/highest standing; 1 - bottom of ladder/lowest standing
+#sc8 rate your health, 1=excellent; 2=very good; 3=good; 4=fair; 5=poor
+#anxiety-related: DSM_AGO_GAD_PAT_PDS_PTS_SO (agoraphobia, GAD, panic attack, panic disorder, PTSD, social phobia)
+#ied: DSM_IED
+#substance abuse: DSM_ALA_DRA_TBD (alcohol abuse w/wout dependence, drgu abuse w/wout dependence, nicotine dependence)
+#depressive: DSM_DYS_MDE_MND (dysthymia, major depressive episode, minor depressive disorder)
+full <- read.csv("ukrharvard0729.csv") %>% select(c(sampleid, strata, secu, sc1, io11_1b, io16, io15, dmf12, fnu4, dm4a_1, de20_1, dm2_1:dm2_11, em8_1:em8_11, sc3, sc3a, sr1a:sr1g, cc8, de34, de38, sc8))
+
+dem <- read.csv("ukraine_dem.csv") %>% select(c(finalp1wt, finalp2wt, ï..sampleid)) %>% mutate(sampleid = ï..sampleid) %>% select(-(ï..sampleid))
+
+at <- full_join(full, diag, by="sampleid") %>%
+        full_join(dem, by="sampleid") %>%
+      filter(!(is.na(io11_1b)) & !(is.na(sc1))) %>%
+      mutate(sex = as.factor(if_else(io11_1b==1,1,0)), #1 male 0 female 
+         treatment = as.factor(if_else(sr1a==1 | sr1b==1 | sr1c==1 | sr1d==1 | sr1e==1 | sr1f==1 | sr1g==1, 1, 0)) , #seek trt=1; not=0
+         alternative = as.factor(if_else((sr1a==1 | sr1b==1 | sr1c==1 | sr1d==1 | sr1e==1) & (sr1f==1 | sr1g==1), 2,
+                                         ifelse(sr1a==1 | sr1b==1 | sr1c==1 | sr1d==1 | sr1e==1, 0,
+                                                ifelse(sr1f==1 | sr1g==1, 1, NA)))), #seek alt= 1, seek conv = 0; seek both=2
+         age= as.factor(ifelse(sc1<=49, 0, 1)), #50+ =1; 49 or less=0
+         edu = as.factor(ifelse(is.na(de20_1) & (dm4a_1 == 1 | dm4a_1==2 | dm4a_1==3 | dm4a_1==4), 0, 
+                                ifelse(is.na(de20_1) & (dm4a_1==5 | dm4a_1==6 | dm4a_1==7 | dm4a_1==8), 1,
+                                       ifelse(is.na(dm4a_1) & (de20_1==1 | de20_1==2 | de20_1==3 | de20_1==4), 0,
+                                              ifelse(is.na(dm4a_1) & (de20_1==5 | de20_1==6 | de20_1==7 |de20_1==8), 1, NA))))), #1 high school or less, 0 greater than high school
+         work = as.factor(ifelse(!(is.na(dm2_1)) | !(is.na(dm2_2)) | !(is.na(dm2_9)) | !(is.na(em8_1)) | !(is.na(em8_2)) | !(is.na(em8_9)), 0, 
+                                 ifelse(!(is.na(dm2_3)) | !(is.na(dm2_4)) | !(is.na(em8_3)) | !(is.na(em8_4)), 1, 
+                                        ifelse(!(is.na(dm2_5)) | !(is.na(dm2_6)) | !(is.na(dm2_7)) | !(is.na(dm2_8)) | !(is.na(dm2_10)) | !(is.na(em8_5)) | !(is.na(em8_6)) | !(is.na(em8_7)) | !(is.na(em8_8)) | !(is.na(em8_10)), 1, NA)))), #unemployed=1, employed=0
+         marriage = as.factor(ifelse((sc3==1 | sc3==7 | sc3a==1), 0, ifelse(sc3a==5, 1, NA))), # commited relationship/married=0; 1 not married/commited
+         poverty = as.factor(ifelse((is.na(fnu4) & dmf12==1) | (is.na(dmf12) & fnu4==1), 0, 1)), #unable to afford food =0; able to afford food=1
+         dnieper = as.factor(ifelse(io15==3 | io15==4 | io15==5 | io15==9 | io15==11 | io15==12 | io15==14 | io15==15
+                                     | io15==16 | io15==18 | io15==20 | io15==23 | io15==24 | io15==25, 0, 1)), #1 east, 0 west
+         urbanicity = as.factor(ifelse(io16==1 | io16==2, 0, 1)), #0=rural or township; 1=cities up to 200,000 and beyond
+         srh = as.factor(ifelse(sc8==1 | sc8==2 | sc8==3 | sc8==4, 0, 
+                                ifelse(sc8==5, 1, NA))), #poor SRH=1, #adequate SR=0
+         physhealth = as.factor(ifelse(is.na(cc8), 0, 
+                                       ifelse(cc8>0, 1, 0))), #presence of physical health issues=1, absence=0
+         religiosity = as.factor(ifelse(de34==1 | de34==2, 0, 
+                                        ifelse(de34==3 | de34==4, 1, NA))), #weak religious beliefs=1; strong religious beliefs=1
+         commstanding = as.factor(ifelse(de38 <=5 & de38 >=1, 1, 
+                                         ifelse(de38 <=10 & de38 >=6, 0, NA))), #low comm standing=1; high comm standing=0
+         depressive = as.factor(ifelse(DSM_MDE==1 | DSM_MND==1 | DSM_DYS==1, 1, 0)),
+         anxiety = as.factor(ifelse(DSM_AGO==1 | DSM_GAD==1 | DSM_PAT==1 | DSM_PDS==1 | DSM_PTS==1 | DSM_SO==1, 1, 0)),
+         ied = as.factor(ifelse(DSM_IED==1, 1, 0)),
+         subabuse = as.factor(ifelse(DSM_ALA==1 | DSM_DRA==1 | DSM_TBD==1, 1, 0))) %>%
+  select(c(sc1, sex, age, edu, work, marriage, poverty, dnieper, urbanicity, srh, physhealth, religiosity, commstanding, depressive, anxiety, ied, subabuse, treatment, alternative, sampleid, finalp1wt, finalp2wt, io15, secu, strata))
+at1 <- at %>% filter(alternative==1 | alternative==0)
+```
+
+```{r}
+#looking at relationship of oblast to beta estimates for simple logistic regression, education (>HS=1, HS or less=0) predictor variable and treatment type response (sought treatment=1, did not seek treatment=0)
+
+#setting up weights for individual logistic regression models by oblast
+clus1 <- svydesign(ids=~secu, strata =~strata, weights =~finalp2wt, nest = T, data=subset(at, io15==1 & !is.na(treatment)))
+options(survey.lonely.psu = "adjust")
+clus2 <- svydesign(ids=~secu, strata =~strata, weights =~finalp2wt, nest = T, data=subset(at, io15==2 & !is.na(treatment)))
+options(survey.lonely.psu = "adjust")
+clus3 <- svydesign(ids=~secu, strata =~strata, weights =~finalp2wt, nest = T, data=subset(at, io15==3 & !is.na(treatment)))
+options(survey.lonely.psu = "adjust")
+clus4 <- svydesign(ids=~secu, strata =~strata, weights =~finalp2wt, nest = T, data=subset(at, io15==4 & !is.na(treatment)))
+options(survey.lonely.psu = "adjust")
+clus5 <- svydesign(ids=~secu, strata =~strata, weights =~finalp2wt, nest = T, data=subset(at, io15==5 & !is.na(treatment)))
+options(survey.lonely.psu = "adjust")
+
+#using survey package to run simple logistic regression models (data subsetted by oblast)
+#There are some standard error issues for oblasts 4 and 5 due to very low sample size
+model1 <- svyglm(treatment~edu, design=clus1, family=quasibinomial("logit")); summary(model1)
+model2 <- svyglm(treatment~edu, design=clus2, family=quasibinomial("logit")); summary(model2)
+model3 <- svyglm(treatment~edu, design=clus3, family=quasibinomial("logit")); summary(model3)
+model4 <- svyglm(treatment~edu, design=clus4, family=quasibinomial("logit")); summary(model4)
+addmargins(round(svytable(~edu+treatment, design=clus4)))
+model5 <- svyglm(treatment~edu, design=clus5, family=quasibinomial("logit")); summary(model5)
+addmargins(round(svytable(~edu+treatment, design=clus5)))
+
+#creating new data frame with oblast and beta estimate for education greater than high school explanatory variable
+oblasts <- data.frame("oblast"=1:5, "beta_edu"=c(model1$coefficients[2], model2$coefficients[2], model3$coefficients[2], model4$coefficients[2], model5$coefficients[2]))
+
+#plotting beta coefficients by oblast
+oblasts %>%
+  ggplot(aes(y=beta_edu, x=as.factor(oblast))) +
+  geom_point()+
+  ggtitle("Beta estimates, seeking treatment ~ education") + xlab("oblast") + ylab("beta estimates for >HS education level")
+```
+
+
+
+
+
