@@ -121,11 +121,12 @@ corruption <-
                                 "Chernihiv" = rowname == 25,
                                 "Chernivtsi" = rowname == 26,
                                 "Total" = rowname == 27)) %>%
-  select(Oblast, all_corrupt) %>%
-  arrange(Oblast)
+  select(Oblast, all_corrupt) 
 
-corruption$all_corrupt[20]<-
-  corruption$all_corrupt[4]
+
+# deric I'm not sure why you're doing this part
+# corruption$all_corrupt[20]<-
+#  corruption$all_corrupt[4]
 
 # what language do you speak at home?
 ### percent Ukrainian
