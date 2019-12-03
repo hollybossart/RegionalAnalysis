@@ -135,11 +135,12 @@ languageraw <-
   addmargins() %>%
   as.data.frame.matrix() %>%
   # calculate percent of Ukrainian speakers
-  mutate(ukr = `1`/Sum) %>%
+  mutate(ukr = `1`/Sum) %>% #check data here, are there really 0 ukrainian speakers in Crimea?
   rownames_to_column()
+
 language <-
   languageraw %>%
-  mutate(Oblast = derivedVariable("Crimea" = rowname == 1 | rowname == 27,
+  mutate(Oblast = derivedVariable("Crimea" = rowname == 1,
                                 "Kiev City" = rowname == 2,
                                 "Kiev" = rowname == 3,
                                 "Vinnytsya" = rowname == 4,
@@ -164,11 +165,9 @@ language <-
                                 "Khmel'nyts'kyy" = rowname == 23,
                                 "Cherkasy" = rowname == 24,
                                 "Chernihiv" = rowname == 25,
-                                "Chernivtsi" = rowname == 26,)) %>%
-  select(Oblast, ukr) %>%
-  group_by(Oblast) %>%
-  summarize()
-  arrange(Oblast)
+                                "Chernivtsi" = rowname == 26,
+                                "Total" = rowname == 27)) %>%
+  select(Oblast, ukr)
 
 # for which party or block have you voted?
 ### percent "Our Ukraine"
@@ -179,6 +178,8 @@ politicalraw <-
   # percent "Our Ukraine" party
   mutate(our_ukr = `2`/Sum) %>%
   rownames_to_column()
+
+# cleaning political raw data
 political <-
   politicalraw %>%
   mutate(Oblast = derivedVariable("Crimea" = rowname == 1,
