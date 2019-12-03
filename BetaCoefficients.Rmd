@@ -208,9 +208,8 @@ political <-
                                 "Cherkasy" = rowname == 24,
                                 "Chernihiv" = rowname == 25,
                                 "Chernivtsi" = rowname == 26,
-                                "Sevastopol'" = rowname == 27)) %>%
-  select(Oblast, our_ukr) %>%
-  arrange(Oblast)
+                                "Total" = rowname == 27)) %>%
+  select(Oblast, our_ukr) 
 
 # is the necessary medical service available?
 ### percent "not at all sure"
