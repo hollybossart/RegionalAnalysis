@@ -1,5 +1,5 @@
 ---
-title: "Exploratory Maps"
+title: "Beta Coefficient Plotting (EDA)"
 output:
   pdf_document: default
   html_notebook: default
@@ -82,6 +82,7 @@ colnames(gdp) <-
 gdp <-
   gdp %>%
   mutate(PerCapitaGDP = as.numeric(PerCapitaGDP))
+
 # how widespread is corruption?
 ### taking proportion of people who answered 4: everyone is corrupt
 corruptionraw <-
@@ -89,7 +90,7 @@ corruptionraw <-
   addmargins() %>%
   as.data.frame.matrix() %>%
   # calcuates percent of people answering everyone is corrupt
-  mutate(all_corrupt = `4`/Sum) %>%
+  mutate(all_corrupt = `4`/Sum) %>% ## there is a problem here because the 27th row is not sevastopol, it is the total
   rownames_to_column()
 corruption <-
   corruptionraw %>%
@@ -119,7 +120,7 @@ corruption <-
                                 "Cherkasy" = rowname == 24,
                                 "Chernihiv" = rowname == 25,
                                 "Chernivtsi" = rowname == 26,
-                                "Sevastopol'" = rowname == 27)) %>%
+                                "Total" = rowname == 27)) %>%
   select(Oblast, all_corrupt) %>%
   arrange(Oblast)
 
@@ -137,7 +138,7 @@ languageraw <-
   rownames_to_column()
 language <-
   languageraw %>%
-  mutate(Oblast = derivedVariable("Crimea" = rowname == 1,
+  mutate(Oblast = derivedVariable("Crimea" = rowname == 1 | rowname == 27,
                                 "Kiev City" = rowname == 2,
                                 "Kiev" = rowname == 3,
                                 "Vinnytsya" = rowname == 4,
@@ -162,9 +163,10 @@ language <-
                                 "Khmel'nyts'kyy" = rowname == 23,
                                 "Cherkasy" = rowname == 24,
                                 "Chernihiv" = rowname == 25,
-                                "Chernivtsi" = rowname == 26,
-                                "Sevastopol'" = rowname == 27)) %>%
+                                "Chernivtsi" = rowname == 26,)) %>%
   select(Oblast, ukr) %>%
+  group_by(Oblast) %>%
+  summarize()
   arrange(Oblast)
 
 # for which party or block have you voted?
