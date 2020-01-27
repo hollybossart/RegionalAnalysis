@@ -61,6 +61,9 @@ unicef <-
 ### CIDI data
 cidi_raw <-
   fread("ukrmain_RU_061419.csv")
+### population data
+pop2004_raw <-
+  fread("pop_2004.csv")
 ```
 
 # Map Exploration
@@ -73,15 +76,52 @@ ukroblast$NAME_1
 # Data Aggregation
 
 ```{r}
+# clean up pop data
+pop2004 <-
+  pop2004_raw %>%
+  mutate(Oblast = str_replace_all(Oblast, "[^[:alnum:]]", " "),
+         Oblast = ifelse(Oblast == "Autonomous Republic of Crimea", "Crimea", 
+                  ifelse(Oblast == "Dnipropetrovsk", "Dnipropetrovs'k",
+                  ifelse(Oblast == "Donetsk", "Donets'k",
+                  ifelse(Oblast == "Ivano Frankivsk", "Ivano-Frankivs'k",
+                  ifelse(Oblast == "Khmelnytskiy", "Khmel'nyts'kyy",
+                  ifelse(Oblast == "City of Kyiv", "Kiev City",
+                  ifelse(Oblast == "Kyiv", "Kiev",
+                  ifelse(Oblast == "Lviv", "L'viv",
+                  ifelse(Oblast == "Luhansk", "Luhans'k",
+                  ifelse(Oblast == "Odesa", "Odessa",
+                  ifelse(Oblast == "City of Sevastopol", "Sevastopol'",
+                  ifelse(Oblast == "Ternopil", "Ternopil'",
+                  ifelse(Oblast == "Zakarpattya", "Transcarpathia", Oblast))))))))))))))
+
 # clean up GDP data, obtain variables of interest
 gdp <-
   gdpraw[6:32] %>%
-  select(V1, V29)
+  select(V1, V29, V2)
 colnames(gdp) <-
-  c("Oblast", "PerCapitaGDP")
-gdp <-
+  c("Oblast", "PerCapitaGDP", "GDP")
+gdp1 <-
   gdp %>%
-  mutate(PerCapitaGDP = as.numeric(PerCapitaGDP))
+  mutate(PerCapitaGDP = as.numeric(PerCapitaGDP),
+         GDP = 1000000 * as.numeric(GDP), # GDP in dataset by millions
+         Oblast = ifelse(Oblast == "Autonomous Republic of Crimea", "Crimea", 
+                  ifelse(Oblast == "Dnipropetrovsk", "Dnipropetrovs'k",
+                  ifelse(Oblast == "Donetsk", "Donets'k",
+                  ifelse(Oblast == "Ivano-Frankivsk", "Ivano-Frankivs'k",
+                  ifelse(Oblast == "Khmelnytskiy", "Khmel'nyts'kyy",
+                  ifelse(Oblast == "Kyiv" & PerCapitaGDP == 23130, "Kiev City",
+                  ifelse(Oblast == "Kyiv" & PerCapitaGDP == 6652, "Kiev",
+                  ifelse(Oblast == "Lviv", "L'viv",
+                  ifelse(Oblast == "Luhansk", "Luhans'k",
+                  ifelse(Oblast == "Odesa", "Odessa",
+                  ifelse(Oblast == "Sevastopol", "Sevastopol'",
+                  ifelse(Oblast == "Ternopil", "Ternopil'",
+                  ifelse(Oblast == "Zakarpattya", "Transcarpathia", Oblast)))))))))))))) %>%
+  left_join(pop2004, by = "Oblast") %>%
+  mutate(PerCapitaGDP = ifelse(Oblast == "Crimea", (gdp1$GDP[1] + gdp1$GDP[27])/(gdp1$Population[1] + gdp1$Population[27]),
+                        ifelse(Oblast == "Sevastopol'", (gdp1$GDP[1] + gdp1$GDP[27])/(gdp1$Population[1] + gdp1$Population[27]),
+                               PerCapitaGDP)))
+  
 
 # how widespread is corruption?
 ### taking proportion of people who answered 4: everyone is corrupt
@@ -431,7 +471,7 @@ environment <-
                                 "Chernivtsi" = rowname == 26,
                                 "Sevastopol'" = rowname == 27),
          # fix sevastopol to take on crimea values since row 27 is avg across ukraine
-         air_concern = ifelse(Oblast == "Sevastopol'", air_concernt[1], air_concern)) %>%
+         air_concern = ifelse(Oblast == "Sevastopol'", air_concern[1], air_concern)) %>%
   arrange(Oblast) %>%
   select(Oblast, air_concern)
 
@@ -491,7 +531,7 @@ cidi <-
 
 # Create one large data set by joining with oblasts
 
-combined.data =
+combined.data <-
   cidi %>%
   inner_join(corruption, by = "Oblast")  
 
@@ -532,8 +572,8 @@ ggplot(data = ukroblast, aes(fill = region8)) +
 
 ```{r}
 # find bins, visualize
-quantile(gdp$PerCapitaGDP)
-ggplot(gdp, aes(x = PerCapitaGDP)) +
+quantile(gdp1$PerCapitaGDP)
+ggplot(gdp1, aes(x = PerCapitaGDP)) +
   geom_histogram() +
   geom_vline(xintercept = 4735.5) +
   geom_vline(xintercept = 5163.0) +
@@ -541,24 +581,11 @@ ggplot(gdp, aes(x = PerCapitaGDP)) +
 
 # bin GDP per capita data, add to shape file
 gdp2 <-
-  gdp %>%
+  gdp1 %>%
   mutate(GDPcapita = derivedFactor("< 4740" = PerCapitaGDP < 4740, 
                                    "4740-5160" = PerCapitaGDP >= 4740 & PerCapitaGDP < 5160,
                                    "5160-6840" = PerCapitaGDP >= 5160 & PerCapitaGDP < 6840, 
-                                   "> 6840" = PerCapitaGDP >= 6840),
-         Oblast = ifelse(Oblast == "Autonomous Republic of Crimea", "Crimea", 
-                  ifelse(Oblast == "Dnipropetrovsk", "Dnipropetrovs'k",
-                  ifelse(Oblast == "Donetsk", "Donets'k",
-                  ifelse(Oblast == "Ivano-Frankivsk", "Ivano-Frankivs'k",
-                  ifelse(Oblast == "Khmelnytskiy", "Khmel'nyts'kyy",
-                  ifelse(Oblast == "Kyiv" & PerCapitaGDP == 23130, "Kiev City",
-                  ifelse(Oblast == "Kyiv" & PerCapitaGDP == 6652, "Kiev",
-                  ifelse(Oblast == "Lviv", "L'viv",
-                  ifelse(Oblast == "Luhansk", "Luhans'k",
-                  ifelse(Oblast == "Odesa", "Odessa",
-                  ifelse(Oblast == "Sevastopol", "Sevastopol'",
-                  ifelse(Oblast == "Ternopil", "Ternopil'",
-                  ifelse(Oblast == "Zakarpattya", "Transcarpathia", Oblast)))))))))))))) %>%
+                                   "> 6840" = PerCapitaGDP >= 6840)) %>%
   select(Oblast, GDPcapita) %>%
   arrange(Oblast)
 ukroblast$percapitaGDP <-
