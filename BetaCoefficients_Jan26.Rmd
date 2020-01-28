@@ -117,7 +117,9 @@ gdp1 <-
                   ifelse(Oblast == "Sevastopol", "Sevastopol'",
                   ifelse(Oblast == "Ternopil", "Ternopil'",
                   ifelse(Oblast == "Zakarpattya", "Transcarpathia", Oblast)))))))))))))) %>%
-  left_join(pop2004, by = "Oblast") %>%
+  left_join(pop2004, by = "Oblast")
+gdp1 <-
+  gdp1 %>%
   mutate(PerCapitaGDP = ifelse(Oblast == "Crimea", (gdp1$GDP[1] + gdp1$GDP[27])/(gdp1$Population[1] + gdp1$Population[27]),
                         ifelse(Oblast == "Sevastopol'", (gdp1$GDP[1] + gdp1$GDP[27])/(gdp1$Population[1] + gdp1$Population[27]),
                                PerCapitaGDP)))
