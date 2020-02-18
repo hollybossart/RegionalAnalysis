@@ -146,7 +146,7 @@ corruption <-
                                 "Zhytomyr" = rowname == 8,
                                 "Transcarpathia" = rowname == 9,
                                 "Zaporizhzhya" = rowname == 10,
-                                "Ivano-Fankivs'k" = rowname == 11,
+                                "Ivano-Frankivs'k" = rowname == 11,
                                 "Kirovohrad" = rowname == 12,
                                 "Luhans'k" = rowname == 13,
                                 "L'viv" = rowname == 14,
@@ -195,7 +195,7 @@ language <-
                                 "Zhytomyr" = rowname == 8,
                                 "Transcarpathia" = rowname == 9,
                                 "Zaporizhzhya" = rowname == 10,
-                                "Ivano-Fankivs'k" = rowname == 11,
+                                "Ivano-Frankivs'k" = rowname == 11,
                                 "Kirovohrad" = rowname == 12,
                                 "Luhans'k" = rowname == 13,
                                 "L'viv" = rowname == 14,
@@ -240,7 +240,7 @@ political <-
                                 "Zhytomyr" = rowname == 8,
                                 "Transcarpathia" = rowname == 9,
                                 "Zaporizhzhya" = rowname == 10,
-                                "Ivano-Fankivs'k" = rowname == 11,
+                                "Ivano-Frankivs'k" = rowname == 11,
                                 "Kirovohrad" = rowname == 12,
                                 "Luhans'k" = rowname == 13,
                                 "L'viv" = rowname == 14,
@@ -283,7 +283,7 @@ medical <-
                                 "Zhytomyr" = rowname == 8,
                                 "Transcarpathia" = rowname == 9,
                                 "Zaporizhzhya" = rowname == 10,
-                                "Ivano-Fankivs'k" = rowname == 11,
+                                "Ivano-Frankivs'k" = rowname == 11,
                                 "Kirovohrad" = rowname == 12,
                                 "Luhans'k" = rowname == 13,
                                 "L'viv" = rowname == 14,
@@ -326,7 +326,7 @@ tenyear <-
                                 "Zhytomyr" = rowname == 8,
                                 "Transcarpathia" = rowname == 9,
                                 "Zaporizhzhya" = rowname == 10,
-                                "Ivano-Fankivs'k" = rowname == 11,
+                                "Ivano-Frankivs'k" = rowname == 11,
                                 "Kirovohrad" = rowname == 12,
                                 "Luhans'k" = rowname == 13,
                                 "L'viv" = rowname == 14,
@@ -369,7 +369,7 @@ religion <-
                                 "Zhytomyr" = rowname == 8,
                                 "Transcarpathia" = rowname == 9,
                                 "Zaporizhzhya" = rowname == 10,
-                                "Ivano-Fankivs'k" = rowname == 11,
+                                "Ivano-Frankivs'k" = rowname == 11,
                                 "Kirovohrad" = rowname == 12,
                                 "Luhans'k" = rowname == 13,
                                 "L'viv" = rowname == 14,
@@ -412,7 +412,7 @@ econ <-
                                 "Zhytomyr" = rowname == 8,
                                 "Transcarpathia" = rowname == 9,
                                 "Zaporizhzhya" = rowname == 10,
-                                "Ivano-Fankivs'k" = rowname == 11,
+                                "Ivano-Frankivs'k" = rowname == 11,
                                 "Kirovohrad" = rowname == 12,
                                 "Luhans'k" = rowname == 13,
                                 "L'viv" = rowname == 14,
@@ -455,7 +455,7 @@ environment <-
                                 "Zhytomyr" = rowname == 8,
                                 "Transcarpathia" = rowname == 9,
                                 "Zaporizhzhya" = rowname == 10,
-                                "Ivano-Fankivs'k" = rowname == 11,
+                                "Ivano-Frankivs'k" = rowname == 11,
                                 "Kirovohrad" = rowname == 12,
                                 "Luhans'k" = rowname == 13,
                                 "L'viv" = rowname == 14,
@@ -499,7 +499,7 @@ cidi <-
                                 "Zhytomyr" = io15 == 8,
                                 "Transcarpathia" = io15 == 9,
                                 "Zaporizhzhya" = io15 == 10,
-                                "Ivano-Fankivs'k" = io15 == 11,
+                                "Ivano-Frankivs'k" = io15 == 11,
                                 "Kirovohrad" = io15 == 12,
                                 "Luhans'k" = io15 == 13,
                                 "L'viv" = io15 == 14,
@@ -531,16 +531,27 @@ cidi <-
          any_prop = any/totalpop)
 
 
-# Create one large data set by joining with oblasts
+# Create one large data set by joining with oblasts - case file readout
+cidi_final <- 
+  rbind(cidi, cidi[rep(4, 1),])
+cidi_final[27,]$Oblast <- "Sevastopol'"
+combined_final <-
+  cidi_final %>%
+  left_join(corruption, by = "Oblast") %>%
+  left_join(econ, by = "Oblast") %>%
+  left_join(environment, by = "Oblast") %>%
+  left_join(gdp1, by = "Oblast") %>%
+  left_join(language, by = "Oblast") %>%
+  left_join(medical, by = "Oblast") %>%
+  left_join(political, by = "Oblast") %>%
+  left_join(religion, by = "Oblast") %>%
+  left_join(tenyear, by = "Oblast") %>%
+  select(-totalpop, -anx_prop, -ied_prop, -aff_prop, -alc_prop, -any_prop, -Population) %>%
+  mutate(Oblast = str_replace_all(Oblast, "[^[:alnum:]]", ""))
 
-combined.data <-
-  cidi %>%
-  inner_join(corruption, by = "Oblast")  
-
-##TODO: join all other data sets with the cidi data to make a large master data set by oblast
+fwrite(combined_final, "case_file.csv")
 
 ```
-
 
 
 ### Barrington's 8 Region Map
@@ -879,6 +890,19 @@ ggplot(data = ukroblast, aes(fill = air_concern)) +
 # TODO: beta coefficient calculation for each oblast regressing disorder prevalence on air pollution
 
 ```
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
