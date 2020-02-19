@@ -562,6 +562,12 @@ pop2004_NOSEV <-
   arrange(Oblast)
 
 fwrite(pop2004_NOSEV, "population.csv")
+
+#alphabetize coord file
+coords <- fread("coord_file.csv") %>%
+  arrange(Oblast)
+
+fwrite(coords, "coord_file.csv")
   
 
 ```
