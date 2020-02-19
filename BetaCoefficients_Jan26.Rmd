@@ -163,15 +163,13 @@ corruption <-
                                 "Chernihiv" = rowname == 25,
                                 "Chernivtsi" = rowname == 26,
                                 "Sevastopol'" = rowname == 27),
-         # fix sevastopol to take on crimea values since row 27 is avg across ukraine
+    #sevastopol takes on crimea data 
          all_corrupt = ifelse(Oblast == "Sevastopol'", all_corrupt[1], all_corrupt)) %>%
   arrange(Oblast) %>%
   select(Oblast, all_corrupt) 
 
 
-# deric I'm not sure why you're doing this part
-# corruption$all_corrupt[20]<-
-#  corruption$all_corrupt[4]
+
 
 # what language do you speak at home?
 ### percent Ukrainian
@@ -547,9 +545,24 @@ combined_final <-
   left_join(religion, by = "Oblast") %>%
   left_join(tenyear, by = "Oblast") %>%
   select(-totalpop, -anx_prop, -ied_prop, -aff_prop, -alc_prop, -any_prop, -Population) %>%
-  mutate(Oblast = str_replace_all(Oblast, "[^[:alnum:]]", ""))
+  mutate(Oblast = str_replace_all(Oblast, "[^[:alnum:]]", "")) %>%
+  filter(Oblast != "Sevastopol") %>%
+  arrange(Oblast)
+  
 
 fwrite(combined_final, "case_file.csv")
+
+# writing out the population file for satscan
+pop2004$Population[1] = pop2004$Population[1] + pop2004$Population[27]
+pop2004_NOSEV = pop2004[-c(27), ]
+
+pop2004_NOSEV <-
+  pop2004_NOSEV %>%
+  mutate(Oblast = str_replace_all(Oblast, "[^[:alnum:]]", "")) %>%
+  arrange(Oblast)
+
+fwrite(pop2004_NOSEV, "population.csv")
+  
 
 ```
 
