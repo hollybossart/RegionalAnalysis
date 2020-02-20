@@ -1,0 +1,160 @@
+                                 _____________________________
+
+                                         SaTScan v9.6
+                                 _____________________________
+
+
+Program run on: Wed Feb 19 19:00:48 2020
+
+Purely Spatial analysis
+scanning for clusters with high or low rates
+using the Discrete Poisson model.
+_______________________________________________________________________________________________
+
+SUMMARY OF DATA
+
+Study period.......................: 2000/1/1 to 2000/12/31
+Number of locations................: 26
+Population, averaged over time.....: 47697539
+Total number of cases..............: 691
+Annual cases / 100000..............: 1.4
+_______________________________________________________________________________________________
+
+CLUSTERS DETECTED
+
+1.Location IDs included.: Kharkiv
+  Coordinates / radius..: (49.618818 N, 36.444672 E) / 0 km
+  Population............: 2850164
+  Number of cases.......: 151
+  Expected cases........: 41.29
+  Annual cases / 100000.: 5.3
+  Observed / expected...: 3.66
+  Relative risk.........: 4.40
+  Log likelihood ratio..: 95.916928
+  P-value...............: < 0.00000000000000001
+
+2.Location IDs included.: Rivne, Volyn
+  Coordinates / radius..: (51.055490 N, 26.578138 E) / 123.12 km
+  Population............: 2206760
+  Number of cases.......: 6
+  Expected cases........: 31.97
+  Annual cases / 100000.: 0.3
+  Observed / expected...: 0.19
+  Relative risk.........: 0.18
+  Log likelihood ratio..: 16.436527
+  P-value...............: 0.0000015
+
+3.Location IDs included.: Zhytomyr
+  Coordinates / radius..: (50.660138 N, 28.410725 E) / 0 km
+  Population............: 1347192
+  Number of cases.......: 48
+  Expected cases........: 19.52
+  Annual cases / 100000.: 3.6
+  Observed / expected...: 2.46
+  Relative risk.........: 2.57
+  Log likelihood ratio..: 15.325851
+  P-value...............: 0.0000044
+
+4.Location IDs included.: Odessa, Mykolayiv, Kirovohrad, Cherkasy, Vinnytsya, Kherson
+  Coordinates / radius..: (47.257638 N, 30.211073 E) / 262.53 km
+  Population............: 8954291
+  Number of cases.......: 78
+  Expected cases........: 129.72
+  Annual cases / 100000.: 0.9
+  Observed / expected...: 0.60
+  Relative risk.........: 0.55
+  Log likelihood ratio..: 14.357625
+  P-value...............: 0.000011
+_______________________________________________________________________________________________
+
+PARAMETER SETTINGS
+
+Input
+-----
+  Case File        : C:\Users\12088\Dropbox\UkraineREU2019\Regions\satSCANinputs\case_file.csv
+  Population File  : C:\Users\12088\Dropbox\UkraineREU2019\Regions\satSCANinputs\pop_noCOV.csv
+  Time Precision   : None
+  Start Time       : 2000/1/1
+  End Time         : 2000/12/31
+  Coordinates File : C:\Users\12088\Dropbox\UkraineREU2019\Regions\satSCANinputs\coord.geo
+  Coordinates      : Latitude/Longitude
+
+Analysis
+--------
+  Type of Analysis    : Purely Spatial
+  Probability Model   : Discrete Poisson
+  Scan for Areas with : High or Low Rates
+
+Output
+------
+  Main Results File       : C:\Users\12088\Dropbox\UkraineREU2019\Regions\satSCANoutputs\aff.txt
+  Cluster File            : C:\Users\12088\Dropbox\UkraineREU2019\Regions\satSCANoutputs\aff.col.txt
+  Google Maps File        : C:\Users\12088\Dropbox\UkraineREU2019\Regions\satSCANoutputs\aff.clustermap.html
+  Shapefile               : C:\Users\12088\Dropbox\UkraineREU2019\Regions\satSCANoutputs\aff.clustermap.col.shp
+  Cluster File            : C:\Users\12088\Dropbox\UkraineREU2019\Regions\satSCANoutputs\aff.clustermap.col.dbf
+  Stratified Cluster File : C:\Users\12088\Dropbox\UkraineREU2019\Regions\satSCANoutputs\aff.clustermap.sci.txt
+  Location File           : C:\Users\12088\Dropbox\UkraineREU2019\Regions\satSCANoutputs\aff.clustermap.gis.txt
+  Risk Estimates File     : C:\Users\12088\Dropbox\UkraineREU2019\Regions\satSCANoutputs\aff.clustermap.rr.txt
+  Simulated LLRs File     : C:\Users\12088\Dropbox\UkraineREU2019\Regions\satSCANoutputs\aff.clustermap.llr.txt
+
+Data Checking
+-------------
+  Temporal Data Check     : Check to ensure that all cases and controls are within the specified temporal study period.
+  Geographical Data Check : Check to ensure that all observations (cases, controls and populations) are within the specified geographical area.
+
+Spatial Neighbors
+-----------------
+  Use Non-Euclidian Neighbors file : No
+  Use Meta Locations File          : No
+  Multiple Coordinates Type        : Allow only one set of coordinates per location ID.
+
+Spatial Window
+--------------
+  Maximum Spatial Cluster Size : 25 percent of population at risk
+  Window Shape                 : Circular
+  Isotonic Scan                : No
+
+Cluster Restrictions
+--------------------
+  Minimum Cases in Cluster for High Rates : 2
+  Restrict High Rate Clusters             : No
+  Restrict Low Rate Clusters              : No
+
+Space And Time Adjustments
+--------------------------
+  Adjust for known relative risks : No
+
+Inference
+---------
+  P-Value Reporting                  : Default Combination
+  Number of Replications             : 999
+  Adjusting for More Likely Clusters : No
+
+Border Analysis
+---------------
+  Report Oliveira's F : No
+
+Spatial Output
+--------------
+  Automatically Launch Map                  : Yes
+  Report Hierarchical Clusters              : Yes
+  Criteria for Reporting Secondary Clusters : No Geographical Overlap
+  Report Gini Optimized Cluster Collection  : No
+  Restrict Reporting to Smaller Clusters    : No
+
+Other Output
+------------
+  Report Critical Values     : No
+  Report Monte Carlo Rank    : No
+  Print ASCII Column Headers : Yes
+
+Run Options
+-----------
+  Processor Usage   : All Available Processors
+  Suppress Warnings : No
+  Logging Analysis  : No
+_______________________________________________________________________________________________
+
+Program completed  : Wed Feb 19 19:00:48 2020
+Total Running Time : 0 seconds
+Processor Usage    : 12 processors
