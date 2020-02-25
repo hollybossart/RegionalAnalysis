@@ -1,0 +1,22 @@
+---
+title: "Shape Files"
+output: html_notebook
+---
+
+```{r results = FALSE, include = FALSE}
+library(sf)
+library(sp)
+library(tidyverse)
+```
+
+```{r}
+# read data
+aff_nocov <-
+  st_read("satSCANoutputs/shpFiles/aff_nocov.col.shp")
+alc_nocov <-
+  st_read("satSCANoutputs/shpFiles/alcohol_nocov.col.shp")
+anx <-
+  st_read("satSCANoutputs/shpFiles/anx.col.shp")
+ied <-
+  st_read("satSCANoutputs/shpFiles/ied.col.shp")
+```
