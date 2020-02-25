@@ -19,4 +19,34 @@ anx <-
   st_read("satSCANoutputs/anx.col.shp")
 ied <-
   st_read("satSCANoutputs/ied.col.shp")
+ukroblast <-
+  st_read("ukraineGIS/gadm36_UKR_1.shp")
 ```
+
+```{r}
+ggplot(ukroblast) +
+  geom_sf() + 
+  geom_sf(ied, map = aes(fill = REL_RISK)) +
+  labs(title = "IED Relative Risk",
+       fill = "Relative Risk") +
+  theme(panel.grid.major = element_blank(), 
+        panel.grid.minor = element_blank())
+
+ggplot(ukroblast) +
+  geom_sf() + 
+  geom_sf(ied, map = aes(fill = REL_RISK)) +
+  labs(title = "IED Relative Risk",
+       fill = "Relative Risk") +
+  theme(panel.grid.major = element_blank(), 
+        panel.grid.minor = element_blank())
+```
+
+
+
+
+
+
+
+
+
+
