@@ -12,11 +12,11 @@ library(tidyverse)
 ```{r}
 # read data
 aff_nocov <-
-  st_read("satSCANoutputs/shpFiles/aff_nocov.col.shp")
+  st_read("satSCANoutputs/aff_nocov.col.shp")
 alc_nocov <-
-  st_read("satSCANoutputs/shpFiles/alcohol_nocov.col.shp")
+  st_read("satSCANoutputs/alcohol_nocov.col.shp")
 anx <-
-  st_read("satSCANoutputs/shpFiles/anx.col.shp")
+  st_read("satSCANoutputs/anx.col.shp")
 ied <-
-  st_read("satSCANoutputs/shpFiles/ied.col.shp")
+  st_read("satSCANoutputs/ied.col.shp")
 ```
