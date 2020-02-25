@@ -9,7 +9,7 @@ library(sp)
 library(tidyverse)
 ```
 
-```{r}
+```{r results = FALSE, include = FALSE}
 # read data
 aff_nocov <-
   st_read("satSCANoutputs/aff_nocov.col.shp")
@@ -24,21 +24,37 @@ ukroblast <-
 ```
 
 ```{r}
-ggplot(ukroblast) +
+ggplot(data = ukroblast) +
   geom_sf() + 
-  geom_sf(ied, map = aes(fill = REL_RISK)) +
-  labs(title = "IED Relative Risk",
-       fill = "Relative Risk") +
+  geom_sf(data = ied, aes(alpha = 0.00000001)) +
+  labs(title = "IED Clusters") +
   theme(panel.grid.major = element_blank(), 
-        panel.grid.minor = element_blank())
+        panel.grid.minor = element_blank(),
+        legend.position = "none")
 
-ggplot(ukroblast) +
+ggplot(data = ukroblast) +
   geom_sf() + 
-  geom_sf(ied, map = aes(fill = REL_RISK)) +
-  labs(title = "IED Relative Risk",
-       fill = "Relative Risk") +
+  geom_sf(data = aff_nocov, aes(alpha = 0.00000001)) +
+  labs(title = "Affective Disorders Clusters") +
   theme(panel.grid.major = element_blank(), 
-        panel.grid.minor = element_blank())
+        panel.grid.minor = element_blank(),
+        legend.position = "none")
+
+ggplot(data = ukroblast) +
+  geom_sf() + 
+  geom_sf(data = alc_nocov, aes(alpha = 0.00000001)) +
+  labs(title = "Alcohol Disorder Clusters") +
+  theme(panel.grid.major = element_blank(), 
+        panel.grid.minor = element_blank(),
+        legend.position = "none")
+
+ggplot(data = ukroblast) +
+  geom_sf() + 
+  geom_sf(data = anx, aes(alpha = 0.00000001)) +
+  labs(title = "Anxiety Disorders Clusters") +
+  theme(panel.grid.major = element_blank(), 
+        panel.grid.minor = element_blank(),
+        legend.position = "none")
 ```
 
 
