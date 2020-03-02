@@ -533,7 +533,22 @@ cidi <-
 cidi_final <- 
   rbind(cidi, cidi[rep(4, 1),])
 cidi_final[27,]$Oblast <- "Sevastopol'"
-combined_final <-
+combined_final_shiny <-
+  cidi_final %>%
+  left_join(corruption, by = "Oblast") %>%
+  left_join(econ, by = "Oblast") %>%
+  left_join(environment, by = "Oblast") %>%
+  left_join(gdp1, by = "Oblast") %>%
+  left_join(language, by = "Oblast") %>%
+  left_join(medical, by = "Oblast") %>%
+  left_join(political, by = "Oblast") %>%
+  left_join(religion, by = "Oblast") %>%
+  left_join(tenyear, by = "Oblast") %>%
+  select(-totalpop, -anx_prop, -ied_prop, -aff_prop, -alc_prop, -any_prop, -Population) %>%
+  # mutate(Oblast = str_replace_all(Oblast, "[^[:alnum:]]", "")) %>%
+  filter(Oblast != "Sevastopol") %>%
+  arrange(Oblast)
+combined_final_sat <-
   cidi_final %>%
   left_join(corruption, by = "Oblast") %>%
   left_join(econ, by = "Oblast") %>%
@@ -550,18 +565,20 @@ combined_final <-
   arrange(Oblast)
   
 
-fwrite(combined_final, "case_file.csv")
+fwrite(combined_final_shiny, "case_shiny.csv")
+fwrite(combined_final_sat, "case_file.csv")
 
 # writing out the population file for satscan
 pop2004$Population[1] = pop2004$Population[1] + pop2004$Population[27]
-pop2004_NOSEV = pop2004[-c(27), ]
+pop2004$Population[27] = pop2004$Population[1] + pop2004$Population[27]
+# pop2004_NOSEV = pop2004[-c(27), ]
 
 pop2004_NOSEV <-
   pop2004_NOSEV %>%
-  mutate(Oblast = str_replace_all(Oblast, "[^[:alnum:]]", "")) %>%
   arrange(Oblast)
 
 fwrite(pop2004_NOSEV, "population.csv")
+fwrite(pop2004, "population_sev.csv")
 
 #alphabetize coord file
 coords <- fread("coord_file.csv") %>%

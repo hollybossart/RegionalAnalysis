@@ -1,0 +1,34 @@
+---
+title: "Shiny App Analysis"
+output: html_notebook
+---
+
+```{r include = FALSE}
+# load libraries
+library(data.table)
+library(SpatialEpiApp)
+```
+
+```{r}
+# format data
+case_raw <- fread("case_shiny.csv")
+pop <- fread("population_sev.csv")
+
+case <-
+  case_raw %>%
+  left_join(pop) %>%
+  mutate(date = 2004)
+
+
+fwrite(case, "case_shiny_final.csv")
+```
+
+```{r}
+# launch app
+run_app()
+```
+
+
+
+
+
