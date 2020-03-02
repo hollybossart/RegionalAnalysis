@@ -24,6 +24,51 @@ ukroblast <-
 ```
 
 ```{r}
+# wrangle data
+ukroblast1 <-
+  ukroblast %>%
+  mutate(LOC_ID = as.factor(str_replace_all(NAME_1, "[^[:alnum:]]", "")))
+
+aff_nocov_ind <-
+  aff_nocov %>%
+  mutate(RISK = ifelse(REL_RISK > 1, "High", "Low"))
+
+alc_nocov_ind <-
+  alc_nocov %>%
+  mutate(RISK = ifelse(REL_RISK > 1, "High", "Low"))
+
+anx_ind <-
+  anx %>%
+  mutate(RISK = ifelse(REL_RISK > 1, "High", "Low"))
+
+ied_ind <-
+  ied %>%
+  mutate(RISK = ifelse(REL_RISK > 1, "High", "Low")) %>%
+  rename()
+
+ukroblast_map <-
+  ukroblast %>%
+  st_join(aff_nocov_ind, by = "LOC_ID") %>%
+  st_join(alc_nocov_ind, by = "LOC_ID") %>%
+  st_join(anx_ind, by = "LOC_ID") %>%
+  st_join(ied_ind, by = "LOC_ID")
+
+ukroblast_map <-
+  ukroblast1 %>%
+  st_join(aff_nocov_ind, join = st_intersects)
+ggplot(data = ukroblast_map, aes(fill = RISK)) +
+  geom_sf() +
+  labs(title = "Affective Disorder Clusters") +
+  theme(panel.grid.major = element_blank(), 
+        panel.grid.minor = element_blank())
+
+  st_join(alc_nocov_ind) %>%
+  st_join(anx_ind) %>%
+  st_join(ied_ind)
+```
+
+
+```{r}
 ggplot(data = ukroblast) +
   geom_sf() + 
   geom_sf(data = ied, aes(alpha = 0.00000001)) +
@@ -57,7 +102,13 @@ ggplot(data = ukroblast) +
         legend.position = "none")
 ```
 
-
+```{r}
+ggplot(data = ukroblast_map, aes(fill = RISK)) +
+  geom_sf() +
+  labs(title = "Affective Disorder Clusters") +
+  theme(panel.grid.major = element_blank(), 
+        panel.grid.minor = element_blank())
+```
 
 
 
