@@ -20,7 +20,6 @@ case <-
   mutate(date = 2004,
          NAME_1 = Oblast)
 
-
 fwrite(case, "case_shiny_final.csv")
 ```
 
@@ -35,7 +34,12 @@ ukr <- fread("case_shiny_final.csv")
 run_app()
 ```
 
+```{r}
+# geo1 <- as_Spatial(ukroblast)
+# geo <- 
+```
 
-
-
+```{r}
+# data("pennLC")
+```
 
