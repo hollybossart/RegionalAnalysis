@@ -17,10 +17,17 @@ pop <- fread("population_sev.csv")
 case <-
   case_raw %>%
   left_join(pop) %>%
-  mutate(date = 2004)
+  mutate(date = 2004,
+         NAME_1 = Oblast)
 
 
 fwrite(case, "case_shiny_final.csv")
+```
+
+```{r}
+# compare data
+ohio <- fread("C:/Users/liang/Desktop/Dordt REU/UkraineRegionAnalysis/dataohiocomplete.csv")
+ukr <- fread("case_shiny_final.csv")
 ```
 
 ```{r}
