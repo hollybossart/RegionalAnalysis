@@ -1,0 +1,110 @@
+---
+title             : "Mental Health in Ukraine and Effect Modification by Region"
+shorttitle        : "Spatial Epidemiology of Mental Disorders in Ukraine"
+
+author: 
+  - name          : "Alina Barylsky"
+    affiliation   : "1,2"
+    corresponding : yes    # Define only one corresponding author
+    address       : "Postal address"
+    email         : "abarylsky@smith.edu"
+
+affiliation:
+  - id            : "1"
+    institution   : "Dordt University"
+  - id            : "2"
+    institution   : "Smith College"
+
+
+abstract: |
+  In Ukraine, regional differences have been analyzed as powerful predictors of voting patterns, and mass attitudes (Barrington, 1997). Region has also been examined as a component informing differences in religion, language, and suicide ideation in Ukraine. Bromet et al. (2005) found that living in Eastern Ukraine was a risk factor for mental disorders, and one in three Ukrainians experience a DSM-IV disorder over their lifetime, ranking among the highest compared to other countries analyzed utilizing the same survey instrument. Strong regional differences and a high incidence of disorder motivate the need to study regional differences in mental health prevalences. Other researchers have attempted to aggregate Ukraine’s oblasts into differing regional frameworks based on numerous factors (Barrington & Herron, 2004; Holdar, 1995; Kubicek, 2000), though these frameworks have largely focused on political attitudes rather than mental health. 
+  Our research aims to answer two questions: which oblasts have higher prevalence rates of DSM-IV disorders, and how can we aggregate oblasts into regions to help explain the variation in disorder prevalence? What factors informing regional differences best explain mental disorder prevalence, even when controlling for demographics known to be associated with mental illness? To study these questions, we utilize nationally representative data from the 2002 World Mental Health Survey, the State Statistics Service of Ukraine, and the Kiev International Institute of Sociology to define homogenous regional groups and better understand the relationship between historical, political, cultural and environmental factors and mental health. Our final analysis will include model comparison of various definitions of region to determine which model explains intra- and inter-oblast variation in mental disorder prevalence most accurately. This study importantly introduces geographic epidemiology of mental health in a former Soviet Union country, and allows for more targeted intervention approaches for mental health in a country with a high prevalence of disorders.
+  
+keywords          : "keywords"
+wordcount         : "1799"
+
+bibliography      : ["r-references.bib", "My Library.bib"]
+
+floatsintext      : no
+figurelist        : no
+tablelist         : no
+footnotelist      : no
+linenumbers       : no
+mask              : no
+draft             : no
+
+documentclass     : "apa6"
+classoption       : "man"
+output            : papaja::apa6_pdf
+---
+
+```{r setup, include = FALSE}
+library("papaja")
+```
+
+```{r analysis-preferences}
+# Seed for random number generation
+set.seed(42)
+knitr::opts_chunk$set(cache.extra = knitr::rand_seed)
+```
+
+## Introduction
+
+## What is the basic question; 
+
+The most common classes of mental disorders in the Ukrainian population are depression, substance disorders, and anxiety disorders, along with high alcohol abuse [@bromet_epidemiology_2005]. Despite the widespread occurrence of mental disorders, little treatment is available to Ukrainians regarding mental health. When examining the larger scope of mental health, the question of what is happening at the population-level of Ukrainian mental health arises. Can we apply spatial epidemiology to mental health in Ukraine? Which oblasts have higher prevalence rates of DSM-IV disorders, and how can we aggregate oblasts into regions to help explain the variation in disorder prevalence? Ultimately, does regionality significant when considering mental disorder prevalence in Ukraine?
+
+## 2. Here’s what we know; 
+### Geographic health patterns in Ukraine
+
+There is evidence of geographic variations in physical health in Ukraine. While little has been researched on Ukraine comparatively to other European countries, some studies presenting evidence of geographical variation in health across Ukraine exist. For instance, melanoma has been found in high incidence rates in rural areas of Ukraine compared to urban areas [@korovin_p028_2011]. Numerous studies have been published recording high incidence of thyroid cancer in the northern areas of Ukraine which were most affected by the Chernobyl nuclear explosion [@demidchik2007childhood; @jacob2006thyroid; @stsjazhko1995childhood; @rybakov2000thyroid]. A high prevalence of HIV/AIDS has been found in Ukraine, with particular regions exhibiting significantly high occurrences. @mavrov_evolution_2002 found STIs to be more common in the eastern areas of Ukraine, and @debell_impact_2005 found the highest incidence of HIV/AIDS and intravenous drug users in cities along the Dneiper River. 
+Some evidence exists in past literature regarding the association between psychiatric phenomena and regionality in Ukraine, such as the epidiomology of alcohol use, psychiatric disorders, suicide and partner aggression. Ruralicity is a significant risk factor when considering partner violence by women [@o2008descriptive] and rates of suicide [@mokhovikov_suicide_1996]. Proximity to the Chernobyl nuclear disaster has been linked to higher rates of substance abuse, anxiety, stress and depression, along with overall worse self-reported physical and mental health [@bolt_associations_2018]. Higher rates of heavy alcohol usage exist in the southwest region of Ukraine [@webb_epidemiology_2005; @bromet_epidemiology_2005].
+
+### Importance of studying mental health in Ukraine
+
+Mental disorders are well documented as a leading cause of disability across the globe, particularly in middle-low income countries [@bromet_cross-national_2011]. Ukraine has one of the highest incidences of mental disorders in Europe, with one in three Ukrainians experiencing a DSM-IV disorder [@bromet_epidemiology_2005], compared to the global average of one in fourteen [@charlson_new_2019]. Ukraine is still a relatively newly independent country with the collapse of the Soviet Union in 1991, and is considered a low income, developing country. @alonso_association_2008 found stigma was twice as prevalent among the population surrounding mental and physical impairment in developing countries, including in Ukraine. Ukraine has a history of poor treatment of individuals with mental disorders, with psychiatric hospitalization common during the Soviet era and stigmatization of disabilities and mental illness notoriously high. Institutionalization in mental hospitals was used as a form of punishment and a technique for hiding away disabled people from society during the Soviet Union. Stigma regarding mental health struggles remains pervasive in Ukraine, and conditions of mental health care have changed little since the collapse of the Soviet Union [@petrea_mental_2012]. 
+Ukraine as a whole has experienced a tumultuous history of hardship, with Stalin era famine-genocide Holodomor, incarcerations, deaths, and disappearances, along with Nazi occupation during World War II, poor recovery from war, the Chernobyl environmental disaster, and more. The widespread corruption, economic insecurity, and high level of poverty coupled with intergenerational stress is an indicator of poor health of the population. Poverty indicators and mental health problems are known to be associated with one another in “a vicious cycle” [@world_bank_group_mental_2017; @lund_poverty_2011]. @skryzhevska_inequalities_nodate asserts that spatial inequality in Ukraine is growing, as quality of life indicators in the 2000s were less homogenous than ten years prior. 
+
+### Connection between regionality and mental health
+
+Mental health studied through the lens of spatial epidemiology, though uncommon, is not new; one of the first studies examining mental health variations geographically in 1939 found an association between low socioeconomic status and mental illness in Chicago, USA [@hudson_disparities_2012]. It is difficult to assess where the causal arrow lies in the relationship between SES and poverty, and theories suggest that they relate cyclically. Geographical variation in mental health has been found in studies in other countries for decades, though methodology is not standardized. 
+The intergenerational stress and mental health amongst the population is likely different across Ukraine, as regions have experienced varying degrees of historical trauma. For instance, the northern portion of the country was most contaminated with radiation from the Chernobyl explosion, Stalin targeted certain oblasts during the genocide, Holodomor, etc. This is an indicator that regionality informs mental health distribution. Several studies examining suicide in Ukraine have found regional variations, with frequencies of suicide higher in rural areas and lower suicide rates in the western oblasts [@kryzhanovskaya1999suicidal; @kondrichin_suicide_2002; @mokhovikov_suicide_1996; @bromet2007suicide].  @kondrichin_suicide_2002 considered that differences in suicide rate can be attributed to the socio-cultural differences among regions, which have developed over time.
+
+### Regionality in Ukraine 
+
+Research about regional disparities in Ukraine is lacking, and can be attributed to Soviet era policies that operated on the principle of homogeneity across regions, meaning that inequalities in income and quality-of-life between oblasts should not exist [@skryzhevska_inequalities_nodate]. However, this was not the case then and significant inequality was measured in the USSR in the 1980s. Since independence, economic inequality across Ukraine has increased. 
+The few articles that do implement regional divisions of Ukraine’s oblasts typically follow two-region East-West split of the country [@pilyavsky2006east], using the Dnieper River as a natural border, a four-region breakdown of oblasts into rough quarters, East, West, North, and South [@arel1992federalism], or a five-region technique by adding either Central Ukraine or Crimea as the fifth region [@birch2000elections; @kubicek2000regional]. Well-theorized explanations behind these regional divisions are not existent in th literature. Kiev International Institute of Sociology implements a five-region method for their sociological research of West, East, East-Central, and South, while @barrington_reexamining_2009 found an 8-region split, informed by differing patterns of economic development, historical experiences, and demographic factors, to be most useful when examining the political landscape of Ukraine.  This framework of distinct regional cultures was found to be a stronger indicator for political attitudes and mass attitudes than demographic factors such as per-capita GDP, class, income, education, and gender.
+
+#### Considering Ethnicity in Ukraine
+
+Ethnicity is often defined as the combination of shared histories, experiences, and language. In Ukraine specifically, a question of ethnicity was introduced in the 2001 census. Prior to this point, Soviet censuses only asked about nationality. In the past, responses to language preference questions on censuses have been used as a proxy for ethnicity in past census, though responses could differ wildly among respondents. For instance, an individual who speaks Russian at home, but is fluent in Ukrainian, may respond to a question about their “native tongue” with Ukrainian to assert their national identity [@arel_interpreting_2002].
+The nature of nationality and language in Ukraine is quite complex. A significant portion of Ukrainains are multilingual, typically bilingual to some level of Russian and Ukrainian. The language preferences existent in different areas of Ukraine can be attributed to the historical shifts in policies and ruling governments. During the end of the 19th century and throughout the beginning of the 20th century, Ukrainian became harshly suppressed and Russian was the mandatory language. Education and academic texts in Ukrainian were banned, along with other Ukrainian national symbols. There was a brief decree encouraging “indigenization” during the 1920s, where Ukrainian was briefly encouraged [@himka_history_2015].
+However, this ended quickly, coinciding with the genocide of the 1930s. Thus, many native Ukrainian speakers are also capable of communicating in Russian, while the reverse is not as common. Fast forward to 1989, Ukrainian became the official language of the country, shifting the societal hierarchy of Russian-speakers considered top-tier and Ukrainian below [@bilaniuk_tense_2008]. The restrictions and decrees mandating certain language usage impacted the distribution of language usage. 
+Language and religion together can indicate how regional cultures have developed. Language development in western and eastern areas of Ukraine differed significantly with religious affiliation. The eastern oblasts are historically Orthodox. These oblasts are more heavily populated by Russian speakers, with the majority of people concentrated in urban cities. Comparatively, Ukrainian can be heard more in rural areas and in western oblasts, which historically resisted Russian language assimilation and have a higher percentage of religious individuals [@gee_geography_1995]. When considering the different environments and economic development across Ukraine in addition to regional cultural indicators, regional variation in Ukraine is evident. 
+
+## 3. What is the gap; what needs to be filled in
+
+While spatial epidemiology of mental health has been studied in other countries, this is not the case for Ukraine. Studies on mental health in Ukraine in general are limited, and have focused on demographic factors such as age and gender. A few studies that consider regional variables have found links between mental health problems with rural areas, one finding an association to living in eastern Ukraine, and another with living in southwest Ukraine. 
+Across published studies of geographical variation of mental health, consistent findings exist regarding the risk of low socioeconomic status. However, the connection between regionality and mental health is unique to each country. For instance, studies of spatial variation in mental disorders within Britain and Italy differed as a result of their individual, unique historical development and healthcare infrastructure [@jones_medical_1993]. Making inferences on spatial variation of mental disorders on studies of other countries alone is not enough, Ukraine itself needs to be studied.
+A more comprehensive review of the distribution of mental disorders in Ukraine would assist in forming a better understanding of what geographic factors are related to mental disorder patterns in Ukraine in order to better devise targeted intervention strategies.
+
+## 5. What we’re doing
+Our research aims to assess the role of region in the prevalence of mental disorders in Ukraine. We focus on occurence of DSM-IV mental disorders across Ukraine to determine where clusters of high frequency exist, and what factors inform these clusters. We examine factors such as religious affiliation, language usage, political attitudes, economic differences, and environmental differences. Determining what possible factors may be most connected to mental health can inform strategies for targeted interventions in Ukraine.
+
+
+
+
+
+\newpage
+
+# References
+```{r create_r-references}
+r_refs(file = "r-references.bib")
+```
+
+\begingroup
+\setlength{\parindent}{-0.5in}
+\setlength{\leftskip}{0.5in}
+
+<div id = "refs"></div>
+\endgroup

@@ -1,0 +1,188 @@
+---
+title             : "The Effect of Biological Sex and Gender Expression on Hireability of Entry-Level Job"
+shorttitle        : "BIOLOGICAL SEX, GENDER EXPRESSION, AND HIREABILITY"
+
+author: 
+  - name          : "Connie Zhang"
+    affiliation   : "1"
+    corresponding : yes    # Define only one corresponding author
+    address       : "Postal address"
+    email         : "rgarcia@smith.edu"
+  - name          : "Randi L. Garcia"
+    affiliation   : "1"
+
+
+header-includes:
+   - \usepackage{natbib}
+   
+   
+affiliation:
+  - id            : "1"
+    institution   : "Smith College"
+
+author_note: >
+  Complete departmental affiliations for each author (note the indentation, if you start a new paragraph).
+
+  Enter author note here.
+
+abstract: >
+  Our study was designed to investigate the effect of biological sex and gender expressions on hireability of an entry-level job. A sample of 104 participants (most of whom were college women) took an online survey where they were asked to act as a retail employee in a short vignette describing a customer. They were then asked to rate the hireability of the customer. We conducted a 2x2 between-subjects factorial design to test those effects. We found no significant main effect of biological sex or gender expressions. There was no interaction effect of biological sex and gender expressions either. Implications and directions for future research were discussed.
+  
+keywords          : "keywords"
+wordcount         : "X"
+
+bibliography      : ["references.bib","r-references.bib"]
+
+figsintext        : no
+figurelist        : no
+tablelist         : no
+footnotelist      : no
+lineno            : no
+
+lang              : "english"
+class             : "man"
+output            : papaja::apa6_pdf
+---
+
+```{r include = FALSE}
+library(papaja)
+library(mosaic)
+library(psych)
+```
+
+```{r, include=FALSE}
+expdata <- read.csv(file = "202data.csv", header=TRUE)
+```
+
+```{r create_r-references}
+r_refs(file = "r-references.bib")
+my_citation <- cite_r(file = "r-references.bib")
+```
+
+Although many people have been calling for gender equality in employment, gender stereotypes have persisted to disadvantage women in hiring process, grounded not only on the biological sex but also on the perceived masculinity and femininity [@harvie1998gender]. It is of increasing significance to understand how people’s masculine and feminine traits are perceived and evaluated by others in the hiring process, to add on our knowledge of existing gender-based discrimination. To this end, the current study uses an experimental research method to examine how hiring decisions are impacted by both the biological sex and the gender expressions of potential employees.
+
+Previous studies have demonstrated that female applicants are viewed as less hireable than male applicants are [@harvie1998gender], and applicants who show feminine traits are viewed as less hireable than applicants who show masculine traits [@hareli2008role]. An experimental study conducted by @harvie1998gender showed that participants tended to assign lower-status, lower-salaried jobs to female applicants compared to male applicants when the participants themselves acted as job applicants reviewing their peers. However, they tended to make fairer and more socially desirable decisions when acting as employers to avoid being labeled as sexist. @hareli2008role experimental study indicated that femininity inferred from male applicants’ job history were viewed as an unfavorable characteristic in the hiring process. In their experiment, male applicants who had had a gender atypical job were considered less suitable for future gender typical jobs, although both male and female applicants who had occupied a job that is stereotypically occupied by the opposite sex were evaluated as more competent for another gender atypical job. This calls for explorations into the more complicated gender expressions of humans. 
+@horvath2003antecedents study on sexual orientation-based discrimination in the hiring process showed that the direction of discrimination was more noticeably toward femininity than to non-conforming gender expressions. In their experiment, participants viewed the resumes of people indicated as heterosexual and gender conforming or homosexual and gender non-conforming. The results showed that non-conforming applicants were evaluated significantly less positively than conforming men but more positively than conforming women.
+
+@plake1987access found that breaking gender roles could lead to positive evaluations. In their experimental study, the researchers found that, between the two levels of counseling psychologists, directors and counselors, participants tended to assign applicants with gender-atypical traits to the leadership roles most possibly because they were viewed as more flexible and with a wider breadth of skill, even though all applicants had identical credentials. Contradictory literature exists regarding this issue because people’s non-conformance of gender and gender roles can be viewed tremendously differently depending on the extent of viewers’ beliefs in traditional gender roles [@horvath2003antecedents]. 
+
+Past literature on hiring bias have demonstrated a general favorability of male applicants, presented a vague general favorability of masculine traits [@harvie1998gender; @horvath2003antecedents], and yielded mixed results of people’s attitudes toward biological sex and gender expression non-conforming applicants. There has been little research thus far on how biological sex and gender expressions each have impact on hiring decisions of an entry-level job and how masculinity and femininity have different extents of effects on each gender. To investigate this, we sent out a survey with four vignettes each featuring one customer at the checkout counter of a retail store. The four customers only differ in biological sex and gender expressions, manipulated with names and purchases. We predicted that there would be a main effect of biological sex, such that participants would be more likely to offer employment opportunity to male customers than female customers. We also predicted that there would be a main effect of gender expression, such that participants would be more likely to offer employment opportunity to customers who showed more masculine traits than customers who showed more feminine traits. Finally, we predicted that there would be an interaction effect of biological sex and gender expression, such that gender expressions would have a larger effect on male than on female. We thus expected to find that participants would be more likely to hire masculine female customers than feminine male customers.
+
+
+```{r, include=FALSE}
+#to rename
+expdata <- expdata %>% rename(older18 = Q19, ad_likelihood=Q15, hire_desire = Q17, expectation=Q18, friendly=Q24_1, talkative=Q24_2, approachable=Q24_3, efficient=Q24_4, physicallystrong=Q24_5, considerate=Q24_6, calm=Q24_7, imptfriendly=Q20_1, impttalkative=Q20_2, imptapproachable=Q20_3, imptefficient=Q20_4, imptstrong=Q20_5, imptconsiderate=Q20_6, imptcalm=Q20_7, customer_sex=Q27, masculine=Q29_1, feminine=Q29_2, age=Q48, p_gender=Q50, race_ethnicity=Q51, bio_sex=IV1, gender_expression=IV2)
+
+ expdata <- expdata %>% mutate(hire_desire = ifelse(hire_desire==1, 1, ifelse(hire_desire==8, 2, hire_desire+1)))
+expdata <- expdata %>%
+  filter(!is.na(ad_likelihood) & !is.na(hire_desire) & !is.na(expectation)) %>%
+  mutate(hirability = (ad_likelihood + hire_desire + expectation)/3)%>%
+  filter(!is.na(older18))
+```
+
+
+# Methods
+
+##Design
+In order to test the effects of biological sex and perceived gender presentation on hireability, we used a 2 (biological sex: male, female) x 2 (gender expression: masculine, feminine) between-subjects factorial experimental design. The independent variables manipulated in the study were biological sex and gender expression. Participants were presented with one of the four short vignettes we created, in which they were asked to act as the retail employee and decide on whether or not to give the customer an advertisement for employment opportunities with the store. The only differences in the vignettes were the biological sex and gender expression of the customer. The dependent variable was the likelihood of the customer being hired.
+
+```{r, include=FALSE}
+#code for participants section
+```
+
+## Participants
+Participants were recruited through convenience sampling by posting a link to the online survey both on the Smith College Participant Pool and on Facebook for anyone to click and share. Of the 109 participants, 6.7% identified themselves as male, 77.9% identified themselves as female, and 7.6% identified as queer, transgender, or other, 1.9% of participants chose not to answer and 5.8% either left the space blank or entered an unusable answer. Participant age ranged from 18 to 60, with an average of 20 and a standard deviation of 5.83. Nine participants chose not to give their age or entered an unusual answer (e.g., “junior”, “400”, “0”, “2019”). These participants, and those under the age of 18 were not counted. By using convenience sampling, our sample had a large portion of participants that identified as females in their late teens. In addition, 41.3% of our participants identified as White, 7.7% identified as black or African-American, 27.9% identified as Asian, and 8.7% of our participants identified as Latino.  5.8% identified as Native Americans, while 2.9% filled in the “Other” box, mostly to account for multiracial identities for which we failed to provide an option. 5.8% did not answer the race question. After clearing out unusable responses, 50 participants were assigned to the male customer condition, 54 were assigned to the female customer condition, 51 participants were assigned to the masculine condition and 53 were assigned to the feminine condition.
+
+## Material
+To test the hireability of different customers, we created four vignettes each featuring one particular customer, varying in information by the different levels of the independent variables (i.e., a masculine male, a feminine male, a masculine female, a feminine female). We created a scenario in which the customer casually complains about something personal associated with the item he or she is intending to buy. They behave nicely and politely throughout the process of checking out. To manipulate the gender of the customer, we used the name Michael for the male and Michelle for the female. For the manipulation of gender expression, we changed the items the customer bought and the activities the customer was involved in. Masculinity was indicated by the customer buying protein shakes and dumbbells and mentioning an injury obtained working out in the gym preparing for football season. Femininity was indicated by the customer buying lotion and eyeliner and mentioning his or her make-up.
+
+```{r, include=FALSE}
+a <- alpha(expdata %>% select(ad_likelihood, hire_desire, expectation))
+
+expdata <- expdata %>% mutate(hire2 = (ad_likelihood + hire_desire +expectation)/3)
+
+a$total[1]
+```
+
+Hireability was measured by three questions assessed on a Likert scale of 1 to 7. The first question was “How likely are you to give this person the employment advertisement?” (1 = Not at all likely and 7 = Extremely likely). The second question was “How much do you hope this person gets hired?” (1 = Not at all and 7 = Extremely). The third question was “How well do you think this person will do if they are hired?” (1 = Extremely poor and 7 = Extremely well). The three questions reached high internal consistency ($\alpha$ = `r format(a$total[1], digits=2)`).
+Additionally, participants were asked to rate their customer on seven traits and the importance of each of the seven traits for a retail employee, on a Likert scale of 1 to 7 (1 = Not at all and 7 = Extremely). The seven traits are friendly, talkative, approachable, efficient, physically strong, considerate and calm under pressure. We didn’t use the answers of the two questions for any analysis.
+
+## Procedure
+A questionnaire, via a Qualtrics Survey, was posted on social media (Facebook) and the Smith College Participant Pool. After the participants consented and confirmed that they were older than 18, they got assigned to a random experimental condition and were presented with a vignette in which the customer is either a masculine male or female or a feminine male or female. After reading the vignette, the participants were asked the five above-mentioned questions, three assessing hireability and two evaluating traits, on a scale ranging from 1 to 7. Participants were also asked the biological sex and gender expression of the customer as a manipulation check. They finished the survey by answering demographic questions on their age, gender, and race/ethnicity.
+
+# Results
+All analyses were conducted with `r my_citation`.  
+
+In this study, we investigated how biological sex and gender expression would affect the likelihood of being hired for an entry-level job. First, we hypothesized that there would be a main effect of biological sex, such that participants would be more likely to hire a male customer than a female customer. Second, we hypothesized that there would be a main effect of gender expression, such that participants would be more likely to hire a masculine customer than a feminine customer. Finally, we hypothesized an interaction of biological sex and gender expression, such that participants would be more likely to hire a masculine woman than a feminine man.
+
+
+```{r, include=FALSE}
+anova(lm(hirability~bio_sex*gender_expression, data = expdata))
+``` 
+
+```{r, include=FALSE}
+b <- anova(lm(hirability~bio_sex*gender_expression, data = expdata))
+
+b$"F value"[1]
+names(b)
+
+b$"F value"[3]
+```
+
+```{r, include=FALSE}
+favstats(hirability~bio_sex, data = expdata)
+favstats(hirability~gender_expression, data = expdata)
+```
+
+```{r, include=FALSE}
+c <- favstats(hirability~bio_sex, data = expdata)
+names(c)
+c$"mean"[2]
+
+d <- favstats(hirability~gender_expression, data = expdata)
+names(d)
+d$"mean"[2]
+```
+
+```{r fig1, fig.cap = "Bar chart of condition means. Bars represent means, and error bars represent 95% confidence intervals.", echo=FALSE, dev.args = list(bg = 'white')}
+expdata %>%
+  mutate(bio_sex = as.factor(bio_sex),
+         gender_expression = as.factor(gender_expression),
+         gender_expression = factor(gender_expression, 
+                                    labels=c("Masculine", "Feminine"))) %>%
+ggplot(aes(x = bio_sex, y = hirability, fill = gender_expression)) +
+  stat_summary(fun.y = "mean", geom = "bar", 
+               position = position_dodge(width = 0.9)) +
+  stat_summary(fun.data = "mean_se", geom = "errorbar", 
+               width = 0.25, 
+               position = position_dodge(width = 0.9)) +
+  ylim(0,7) +
+  ylab("Hireability") +
+  xlab("Biological Sex") + 
+  scale_fill_discrete(name = "Gender Expression")
+```
+
+A two-way ANOVA was used to test if biological sex and gender expression had an effect on hireability. There was not a statistically significant main effect of biological sex on hireability, *F* (1, 100) = `r format(b$"F value"[1], digits=1)`, *p* = `r format(b$"Pr(>F)"[1], digits=2)`. Participants’ scores on hireability of male applicants (*M* = `r format(c$"mean"[1], digits=3)`, *SD* = `r format(c$"sd"[1], digits=3)`) were higher than participants’ scores on hireability of female applicants (*M* = `r format(c$"mean"[2], digits=3)`, *SD* = `r format(c$"sd"[2], digits=3)`), but not significantly so. There was no statistically significant main effect of gender expression on hireability, *F* (1, 100) = `r format(b$"F value"[2], digits=2)`, *p* = `r format(b$"Pr(>F)"[2], digits=2)`. Participants’ scores on hireability of feminine applicants (*M* = `r format(d$"mean"[2], digits=3)`, *SD* = `r format(d$"sd"[2], digits=3)`) were higher than participants’ scores on hireability of masculine applicants (*M* = `r format(d$"mean"[1], digits=3)`, *SD* =`r format(d$"sd"[1], digits=3)`), but not significantly so. There was not a statistically significant interaction of biological sex and gender expression on hireability, *F* (1, 100) = `r format(b$"F value"[3], digits=3)`, *p* = `r format(b$"Pr(>F)"[3], digits=2)`. The four condition means are displayed in Figure\ \@ref(fig:fig1).
+
+# Discussion
+Our results did not show that biological sex or gender expressions had any effect on how likely a person got hired. Our results did not show that there was any interaction of biological sex and gender expressions on how likely a person got hired either. 
+
+In our first hypothesis, we predicted that there would be a main effect of biological sex, such that male customers would be more likely to get the employment opportunity than female customers. Our findings did not support this hypothesis as the result was not found statistically significant. The results did show that the hireability of male customers were slightly higher than the hireability of female customers. This is consistent with findings in the @harvie1998gender study that female applicants were viewed as less hireable than male applicants when participants acted as peer employees. The @harvie1998gender study also showed that when participants were aware of hiring bias against women, they tended to make fairer decisions to seem unbiased. This might partly explain why hiring bias against women was not found significant in our study as it is possible that participants detected the purpose of our study and gave more socially desirable answers.
+
+In our second hypothesis, we predicted that there would be a main effect of gender expression, such that customers who showed more masculine traits would be more likely to get the employment opportunity than customers who showed more feminine traits. Our findings did not support this hypothesis. Our results showed that the hireability of feminine customers were slightly higher than the hireability of masculine customer, although not significantly so. This is contrary to those found in @hareli2008role study which showed that perceived femininity inferred from male applicants’ career history made them less suitable for future male-typed jobs. The study suggested that this was related to the belief that jobs that were perceived as suitable for women were also perceived as less prestigious and tended to pay less than jobs that were perceived as more suitable for men. In our study, the job (retail employee) for which the participants were ostensibly recruiting was supposed to be a gender-neutral job. However, it is still possible that as an entry-level job, retail employee was viewed as a more feminine job, thus led participants to rate customers who showed more feminine traits to be more hireable, though not significantly so.
+
+In our final hypothesis, we predicted that there would be an interaction effect of biological sex and gender expression, such that participants would be most likely to hire masculine male customers and least likely to hire feminine female customers, and more likely to hire masculine female customers than feminine male customers. This hypothesis was not supported by our results. Our results showed that feminine male customers were most likely to be hired and masculine male customers were least likely to be hired, and masculine female customers were more likely to be hired than feminine female customers. All the differences between the scores on hireability were slight and not found significant. Our findings are contrary to the findings in the study conducted by @horvath2003antecedents that gender non-conforming applicants were evaluated less positively than masculine men but more positively than feminine women, while masculine women and feminine men didn’t differ in scores on hireability. Our results were also contrary to the findings in the study conducted by @hareli2008role that male applicants who showed femininity were viewed as least hireable, since we found feminine men the most hireable in our study. These two studies both suggested that this was related to people’s beliefs about gender roles. @hareli2008role study further suggested that while women have been altering the boundaries of gender typical jobs by pushing into work domains and positions traditionally occupied by men, men have not been doing the same that much, therefore men who have occupied a female sex-typed job might be perceived as less competent. It is possible, however, that our findings are different because that was an older study and people’s beliefs in gender roles have changed, over the past few years, and become generally more favorable to gender and gender role non-conforming people. It is also possible that people in our sample hold less conservative beliefs about traditional gender roles than the general population. Our findings were also supported by the study conducted by @plake1987access which found that gender and gender role non-conforming applicants were viewed more positively than conforming applicants as those who broke gender roles were viewed as more flexible and with a wider breadth of skill. This is consistent with our findings that feminine men and masculine women were rated as more hireable than feminine women and masculine men, though not significantly so.
+
+There are a number of limitations of our study that must be acknowledged. First among them is the generalizability of the results. We used a convenience sample and a large proportion of our participants were college students who were relatively young, the average of the participant age being 20. In addition to the age of our participants being a limitation, 77.9% of our participants were female, although the overrepresentation of female in our sample did not lead to a general favorability of female customers over male customers in results. Our sample did not accurately represent the population we targeted and thus caused a decreased external validity. Another limitation is the manipulation of the gender expressions of fictional customers. We only used one purchase and one personal fact to indicate each customer as masculine or feminine and there might not have been enough information for the participant to form a relatively comprehensive judgment of the gender expressions of the customer. There is also a limitation about the measurement of the hireability. We only asked the participants about their willingness to offer the customer an advertisement for employment opportunities with the store and that might have been a much more casual decision than an actual hiring decision. Although our measurement achieved high reliability, the validity was not ensured.
+
+Future research on the subject of biological sex and gender expressions in hiring bias will need to use a more representative sample of the population and include more participants. It would be beneficial to use resumes to include more information of the potential employees and ensure the legitimacy of the measurement of hireability. It would also be important that future research use comparisons of gender-neutral jobs and sex-typed jobs or entry-level jobs and higher-level jobs, to further examine the effects of biological sex and gender expressions on hiring decisions on a larger picture. Furthermore, we also expect to see future studies look into how beliefs about gender roles could be shaped by education to mediate hiring discrimination.
+
+Overall our results showed that there were no significant differences between the hireability of masculine male, feminine male, masculine female and feminine female. This finding is contrary to some previous research but could indicate that hiring bias against female, feminine expressions and gender and gender role non-conforming people has been decreasing as a whole. We hope that this study, investigating how gender and gender expressions stimulate hiring bias, will spark future research on the issue.
+
+\newpage
+
+# References
+
+
+\setlength{\parindent}{-0.5in}
+\setlength{\leftskip}{0.5in}
