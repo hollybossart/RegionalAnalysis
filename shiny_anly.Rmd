@@ -20,7 +20,12 @@ case <-
   mutate(date = 2004,
          NAME_1 = Oblast)
 
+case1 <-
+  case %>%
+  select(NAME_1, Population, date, any)
+
 fwrite(case, "case_shiny_final.csv")
+fwrite(case1, "case_any.csv")
 ```
 
 ```{r}
