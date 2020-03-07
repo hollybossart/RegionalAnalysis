@@ -7,13 +7,18 @@ output: html_notebook
 # load libraries
 library(data.table)
 library(SpatialEpiApp)
+library(sf)
+```
+
+```{r}
+# read data
+case_raw <- fread("case_shiny.csv")
+pop <- fread("population_sev.csv")
+ukroblast <- st_read("ukraineGIS/gadm36_UKR_1.shp")
 ```
 
 ```{r}
 # format data
-case_raw <- fread("case_shiny.csv")
-pop <- fread("population_sev.csv")
-
 case <-
   case_raw %>%
   left_join(pop) %>%
@@ -24,14 +29,8 @@ case1 <-
   case %>%
   select(NAME_1, Population, date, any)
 
-fwrite(case, "case_shiny_final.csv")
-fwrite(case1, "case_any.csv")
-```
-
-```{r}
-# compare data
-ohio <- fread("C:/Users/liang/Desktop/Dordt REU/UkraineRegionAnalysis/dataohiocomplete.csv")
-ukr <- fread("case_shiny_final.csv")
+# fwrite(case, "case_shiny_final.csv")
+# fwrite(case1, "case_any.csv")
 ```
 
 ```{r}
@@ -40,11 +39,42 @@ run_app()
 ```
 
 ```{r}
-# geo1 <- as_Spatial(ukroblast)
-# geo <- 
+geo <- fread("satSCANinputs/coord_file.csv")
+geo1 <- rbind(geo, geo[rep(4, 1)])
+geo1[27]$Oblast = "Sevastopol'"
+geo_final <-
+  geo1 %>%
+  arrange(Oblast) %>%
+  select(latitude, longitude)
+exp <- expected(case$Population, case$any, 1)
+out <-
+  kulldorff(geo_final, case$any, case$Population, exp, pop.upper.bound = 0.5, n.simulations = 999, alpha.level = .05, plot = FALSE)
+
+any_most_cluster <- out$most.likely.cluster$location.IDs.included
+any_second_cluster <- c(out$secondary.clusters[[1]]$location.IDs.included, 
+                        out$secondary.clusters[[2]]$location.IDs.included,
+                        out$secondary.clusters[[3]]$location.IDs.included)
+
+ukroblast_sp <- as_Spatial(ukroblast$geometry)
+
+ukroblast$anyrisk <- "Low"
+ukroblast$anyrisk[any_most_cluster] <- "High"
+ukroblast$anyrisk[any_second_cluster] <- "Medium"
+
+ggplot(data = ukroblast, aes(fill = anyrisk)) +
+  geom_sf() +
+  labs(title = "Clusters, Any Mental Disorder",
+       fill = "Risk Level") +
+  theme(panel.grid.major = element_blank(), 
+        panel.grid.minor = element_blank())
+
+plot(ukroblast_sp, axes = TRUE)
+plot(ukroblast_sp[any_most_cluster], add = TRUE, col = "red")
+plot(ukroblast_sp[any_second_cluster], add = TRUE, col = "blue")
+title("Clusters, Any Mental Disorder")
 ```
 
 ```{r}
-# data("pennLC")
+data("pennLC")
 ```
 
