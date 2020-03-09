@@ -84,7 +84,7 @@ ukroblast$anxrisk <- "No Cluster Detected"
 ukroblast$anxrisk[anx_most_cluster] <- "Most Likely Cluster"
 ukroblast$anxrisk[anx_second_cluster] <- "Secondary Cluster"
 
-ggplot(data = ukroblast, aes(fill = anxrisk)) +
+anx_plot <- ggplot(data = ukroblast, aes(fill = anxrisk)) +
   geom_sf() +
   labs(title = "Oblasts with Higher Prevalence Rates of Anxiety Disorders",
        fill = "Legend", 
@@ -94,6 +94,11 @@ ggplot(data = ukroblast, aes(fill = anxrisk)) +
        color = "black",size = 2, fontface = "bold", check_overlap = FALSE) 
   theme(panel.grid.major = element_blank(), 
         panel.grid.minor = element_blank())
+  
+  
+ggsave("anx_cluster_mapping",
+       plot = anx_plot, 
+       device = 'jpeg')
 ```
 
 ```{r}
