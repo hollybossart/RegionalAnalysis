@@ -80,14 +80,16 @@ anx_most_cluster <- out_anx$most.likely.cluster$location.IDs.included
 anx_second_cluster <- c(out_anx$secondary.clusters[[1]]$location.IDs.included, 
                         out_anx$secondary.clusters[[2]]$location.IDs.included)
 
-ukroblast$anxrisk <- "Low"
-ukroblast$anxrisk[anx_most_cluster] <- "High"
-ukroblast$anxrisk[anx_second_cluster] <- "Medium"
+ukroblast$anxrisk <- "No Cluster Detected"
+ukroblast$anxrisk[anx_most_cluster] <- "Most Likely Cluster"
+ukroblast$anxrisk[anx_second_cluster] <- "Secondary Cluster"
 
 ggplot(data = ukroblast, aes(fill = anxrisk)) +
   geom_sf() +
-  labs(title = "Clusters, Anxiety Disorders",
-       fill = "Risk Level") +
+  labs(title = "Oblasts with Higher Prevalence Rates of Anxiety Disorders",
+       fill = "Legend") +
+  geom_text(aes(x=coords$longitude, y=coords$latitude, label=coords$Oblast),
+       color = "black",size = 2, fontface = "bold", check_overlap = FALSE) 
   theme(panel.grid.major = element_blank(), 
         panel.grid.minor = element_blank())
 ```
