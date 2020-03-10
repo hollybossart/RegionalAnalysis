@@ -96,9 +96,8 @@ anx_plot <- ggplot(data = ukroblast, aes(fill = anxrisk)) +
         panel.grid.minor = element_blank())
   
   
-ggsave("anx_cluster_mapping",
-       plot = anx_plot, 
-       device = 'jpeg')
+ggsave("anx_cluster_mapping.png",
+       plot = anx_plot)
 ```
 
 ```{r}
@@ -111,15 +110,20 @@ ied_most_cluster <- out_ied$most.likely.cluster$location.IDs.included
 # ied_second_cluster <- c(out_ied$secondary.clusters[[1]]$location.IDs.included, 
 #                         out_ied$secondary.clusters[[2]]$location.IDs.included,
 #                         out_ied$secondary.clusters[[3]]$location.IDs.included)
+# were there no secondary clusters? why is this comented out?
 
-ukroblast$iedrisk <- "Low"
-ukroblast$iedrisk[ied_most_cluster] <- "High"
+ukroblast$iedrisk <- "No Clusters Detected"
+ukroblast$iedrisk[ied_most_cluster] <- "Most Likely Cluster"
 # ukroblast$iedrisk[any_second_cluster] <- "Medium"
 
 ggplot(data = ukroblast, aes(fill = iedrisk)) +
   geom_sf() +
-  labs(title = "Clusters, IED Disorders",
-       fill = "Risk Level") +
+  labs(title = "Oblasts with Higher Prevalence of IED",
+       fill = "Legend",
+       x = 'x',
+       y = 'y') +
+  geom_text(aes(x=coords$longitude, y=coords$latitude, label=coords$Oblast),
+       color = "black",size = 2, fontface = "bold", check_overlap = FALSE) +
   theme(panel.grid.major = element_blank(), 
         panel.grid.minor = element_blank())
 ```
