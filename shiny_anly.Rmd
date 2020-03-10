@@ -116,7 +116,7 @@ ukroblast$iedrisk <- "No Clusters Detected"
 ukroblast$iedrisk[ied_most_cluster] <- "Most Likely Cluster"
 # ukroblast$iedrisk[any_second_cluster] <- "Medium"
 
-ggplot(data = ukroblast, aes(fill = iedrisk)) +
+iedplot <- ggplot(data = ukroblast, aes(fill = iedrisk)) +
   geom_sf() +
   labs(title = "Oblasts with Higher Prevalence of IED",
        fill = "Legend",
@@ -126,6 +126,9 @@ ggplot(data = ukroblast, aes(fill = iedrisk)) +
        color = "black",size = 2, fontface = "bold", check_overlap = FALSE) +
   theme(panel.grid.major = element_blank(), 
         panel.grid.minor = element_blank())
+
+ggsave('ied_cluster_mapping.png',
+       plot = iedplot)
 ```
 
 ```{r}
@@ -139,16 +142,23 @@ aff_second_cluster <- c(out_aff$secondary.clusters[[1]]$location.IDs.included,
                         out_aff$secondary.clusters[[2]]$location.IDs.included,
                         out_aff$secondary.clusters[[3]]$location.IDs.included)
 
-ukroblast$affrisk <- "Low"
-ukroblast$affrisk[aff_most_cluster] <- "High"
-ukroblast$affrisk[aff_second_cluster] <- "Medium"
+ukroblast$affrisk <- "No Clusters Detected"
+ukroblast$affrisk[aff_most_cluster] <- "Most Likely Cluster"
+ukroblast$affrisk[aff_second_cluster] <- "Secondary Cluster"
 
-ggplot(data = ukroblast, aes(fill = affrisk)) +
+affplot <- ggplot(data = ukroblast, aes(fill = affrisk)) +
   geom_sf() +
-  labs(title = "Clusters, Affective Disorders",
-       fill = "Risk Level") +
+  labs(title = "Oblasts with Higher Prevalence of Affective Disorders",
+       fill = "Legend",
+       x = 'x',
+       y = 'y') +
+  geom_text(aes(x=coords$longitude, y=coords$latitude, label=coords$Oblast),
+       color = "black",size = 2, fontface = "bold", check_overlap = FALSE) +
   theme(panel.grid.major = element_blank(), 
         panel.grid.minor = element_blank())
+
+ggsave('aff_cluster_mapping.png',
+       plot = affplot)
 ```
 
 ```{r}
@@ -162,15 +172,22 @@ alc_most_cluster <- out_alc$most.likely.cluster$location.IDs.included
 #                         out_alc$secondary.clusters[[2]]$location.IDs.included,
 #                         out_alc$secondary.clusters[[3]]$location.IDs.included)
 
-ukroblast$alcrisk <- "Low"
-ukroblast$alcrisk[alc_most_cluster] <- "High"
+ukroblast$alcrisk <- "No Clusters Detected"
+ukroblast$alcrisk[alc_most_cluster] <- "Most Likely Cluster"
 # ukroblast$affrisk[aff_second_cluster] <- "Medium"
 
-ggplot(data = ukroblast, aes(fill = alcrisk)) +
+alcplot <- ggplot(data = ukroblast, aes(fill = alcrisk)) +
   geom_sf() +
-  labs(title = "Clusters, Alcohol Disorders",
-       fill = "Risk Level") +
+  labs(title = "Oblasts with Higher Prevalence of Alcohol Disorders",
+       fill = "Legend",
+       x = 'x',
+       y = 'y') +
+  geom_text(aes(x=coords$longitude, y=coords$latitude, label=coords$Oblast),
+       color = "black",size = 2, fontface = "bold", check_overlap = FALSE) +
   theme(panel.grid.major = element_blank(), 
         panel.grid.minor = element_blank())
+
+ggsave('alc_cluster_mapping.png',
+       plot = alcplot)
 ```
 
