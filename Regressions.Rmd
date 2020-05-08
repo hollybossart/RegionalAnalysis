@@ -1,0 +1,76 @@
+---
+title: "Regressions"
+output: html_notebook
+---
+
+```{r}
+# libraries
+library(data.table)
+library(tidyverse)
+library(glmnet)
+library(MASS)
+
+# load data
+case <- fread("case_file.csv")
+```
+
+```{r}
+# build full model
+full_modany <-
+  lm(any ~ all_corrupt + econ_bad + air_concern + PerCapitaGDP + ukr + med_no + our_ukr + rel_veryimp + certainly10, data = case)
+summary(full_modany)
+
+# build full model
+full_modanx <-
+  lm(anx ~ all_corrupt + econ_bad + air_concern + PerCapitaGDP + ukr + med_no + our_ukr + rel_veryimp + certainly10, data = case)
+summary(full_modanx)
+
+# build full model
+full_modied <-
+  lm(ied ~ all_corrupt + econ_bad + air_concern + PerCapitaGDP + ukr + med_no + our_ukr + rel_veryimp + certainly10, data = case)
+summary(full_modied)
+
+# build full model
+full_modaff <-
+  lm(aff ~ all_corrupt + econ_bad + air_concern + PerCapitaGDP + ukr + med_no + our_ukr + rel_veryimp + certainly10, data = case)
+summary(full_modaff)
+
+# build full model
+full_modalc <-
+  lm(alc ~ all_corrupt + econ_bad + air_concern + PerCapitaGDP + ukr + med_no + our_ukr + rel_veryimp + certainly10, data = case)
+summary(full_modalc)
+```
+
+```{r}
+# forward selection
+forward_mod <- stepAIC(full_mod, direction = "forward", trace = F)
+summary(forward_mod)
+
+# backward selection
+back_mod <- stepAIC(full_mod, direction = "backward", trace = F)
+summary(back_mod)
+```
+
+```{r}
+# case matrix
+case_matrix <-
+  case %>%
+  dplyr::select(-anx, -ied, -aff, -alc, -any, -GDP, -Oblast) %>%
+  as.matrix()
+y_any <- case$any
+
+# lasso
+lambdas <- 10^seq(2, -3, by = -.1)
+lasso_mod <- cv.glmnet(x = case_matrix, y = y_any, alpha = 1, lambda = lambdas)
+lamb <- lasso_mod$lambda.min
+lasso_mod <- glmnet(x = case_matrix, y = y_any, alpha = 1, lambda = lamb)
+
+lasso_coef <- data.frame(coef.name = dimnames(coef(lasso_mod))[[1]], coef.value = matrix(coef(lasso_mod)))
+lasso_coef
+```
+
+
+
+
+
+
