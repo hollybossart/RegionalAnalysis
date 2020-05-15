@@ -15,58 +15,162 @@ case <- fread("case_file.csv")
 ```
 
 ```{r}
-# build full model
+# data wrangling
+### case matrix
+case_matrix <-
+  case %>%
+  dplyr::select(-anx, -ied, -aff, -alc, -any, -GDP, -Oblast) %>%
+  as.matrix()
+
+y_any <- case$any
+y_ied <- case$ied
+y_aff <- case$aff
+y_anx <- case$anx
+y_alc <- case$alc
+```
+
+# Full Models
+
+```{r}
+# build full model - any
 full_modany <-
   lm(any ~ all_corrupt + econ_bad + air_concern + PerCapitaGDP + ukr + med_no + our_ukr + rel_veryimp + certainly10, data = case)
 summary(full_modany)
 
-# build full model
+# build full model - anxiety
 full_modanx <-
   lm(anx ~ all_corrupt + econ_bad + air_concern + PerCapitaGDP + ukr + med_no + our_ukr + rel_veryimp + certainly10, data = case)
 summary(full_modanx)
 
-# build full model
+# build full model - ied
 full_modied <-
   lm(ied ~ all_corrupt + econ_bad + air_concern + PerCapitaGDP + ukr + med_no + our_ukr + rel_veryimp + certainly10, data = case)
 summary(full_modied)
 
-# build full model
+# build full model - aff
 full_modaff <-
   lm(aff ~ all_corrupt + econ_bad + air_concern + PerCapitaGDP + ukr + med_no + our_ukr + rel_veryimp + certainly10, data = case)
 summary(full_modaff)
 
-# build full model
+# build full model - alcohol
 full_modalc <-
   lm(alc ~ all_corrupt + econ_bad + air_concern + PerCapitaGDP + ukr + med_no + our_ukr + rel_veryimp + certainly10, data = case)
 summary(full_modalc)
 ```
 
-```{r}
-# forward selection
-forward_mod <- stepAIC(full_mod, direction = "forward", trace = F)
-summary(forward_mod)
+# Any Disorder
 
-# backward selection
-back_mod <- stepAIC(full_mod, direction = "backward", trace = F)
-summary(back_mod)
+```{r}
+# forward selection - any
+forward_any <- stepAIC(full_modany, direction = "forward", trace = F)
+summary(forward_any)
+
+# backward selection - any
+back_any <- stepAIC(full_modany, direction = "backward", trace = F)
+summary(back_any)
 ```
 
 ```{r}
-# case matrix
-case_matrix <-
-  case %>%
-  dplyr::select(-anx, -ied, -aff, -alc, -any, -GDP, -Oblast) %>%
-  as.matrix()
-y_any <- case$any
-
-# lasso
+# lasso - any
 lambdas <- 10^seq(2, -3, by = -.1)
-lasso_mod <- cv.glmnet(x = case_matrix, y = y_any, alpha = 1, lambda = lambdas)
-lamb <- lasso_mod$lambda.min
-lasso_mod <- glmnet(x = case_matrix, y = y_any, alpha = 1, lambda = lamb)
+lasso_any <- cv.glmnet(x = case_matrix, y = y_any, alpha = 1, lambda = lambdas)
+lamb_any <- lasso_any$lambda.min
+lasso_any <- glmnet(x = case_matrix, y = y_any, alpha = 1, lambda = lamb_any)
 
-lasso_coef <- data.frame(coef.name = dimnames(coef(lasso_mod))[[1]], coef.value = matrix(coef(lasso_mod)))
-lasso_coef
+lasso_any_coef <- data.frame(coef.name = dimnames(coef(lasso_any))[[1]], coef.value = matrix(coef(lasso_any)))
+lasso_any_coef
+```
+
+# Anx Disorder
+
+```{r}
+# forward selection - anx
+forward_anx <- stepAIC(full_modanx, direction = "forward", trace = F)
+summary(forward_anx)
+
+# backward selection - anx
+back_anx <- stepAIC(full_modanx, direction = "backward", trace = F)
+summary(back_anx)
+```
+
+```{r}
+# lasso - anx
+lambdas <- 10^seq(2, -3, by = -.1)
+lasso_anx <- cv.glmnet(x = case_matrix, y = y_anx, alpha = 1, lambda = lambdas)
+lamb_anx <- lasso_anx$lambda.min
+lasso_anx <- glmnet(x = case_matrix, y = y_anx, alpha = 1, lambda = lamb_anx)
+
+lasso_anx_coef <- data.frame(coef.name = dimnames(coef(lasso_anx))[[1]], coef.value = matrix(coef(lasso_anx)))
+lasso_anx_coef
+```
+
+# IED Disorder
+
+```{r}
+# forward selection - ied
+forward_ied <- stepAIC(full_modied, direction = "forward", trace = F)
+summary(forward_ied)
+
+# backward selection - ied
+back_ied <- stepAIC(full_modied, direction = "backward", trace = F)
+summary(back_ied)
+```
+
+```{r}
+# lasso - ied
+lambdas <- 10^seq(2, -3, by = -.1)
+lasso_ied <- cv.glmnet(x = case_matrix, y = y_ied, alpha = 1, lambda = lambdas)
+lamb_ied <- lasso_ied$lambda.min
+lasso_ied <- glmnet(x = case_matrix, y = y_ied, alpha = 1, lambda = lamb_ied)
+
+lasso_ied_coef <- data.frame(coef.name = dimnames(coef(lasso_ied))[[1]], coef.value = matrix(coef(lasso_ied)))
+lasso_ied_coef
+```
+
+# Affective Disorder
+
+```{r}
+# forward selection - aff
+forward_aff <- stepAIC(full_modaff, direction = "forward", trace = F)
+summary(forward_aff)
+
+# backward selection - aff
+back_aff <- stepAIC(full_modaff, direction = "backward", trace = F)
+summary(back_aff)
+```
+
+```{r}
+# lasso - aff
+lambdas <- 10^seq(2, -3, by = -.1)
+lasso_aff <- cv.glmnet(x = case_matrix, y = y_aff, alpha = 1, lambda = lambdas)
+lamb_aff <- lasso_aff$lambda.min
+lasso_aff <- glmnet(x = case_matrix, y = y_aff, alpha = 1, lambda = lamb_aff)
+
+lasso_aff_coef <- data.frame(coef.name = dimnames(coef(lasso_aff))[[1]], coef.value = matrix(coef(lasso_aff)))
+lasso_aff_coef
+```
+
+# Alcohol Disorder
+
+```{r}
+# forward selection - alc
+forward_alc <- stepAIC(full_modalc, direction = "forward", trace = F)
+summary(forward_alc)
+
+# backward selection - alc
+back_alc <- stepAIC(full_modalc, direction = "backward", trace = F)
+summary(back_alc)
+```
+
+```{r}
+# lasso - alc
+lambdas <- 10^seq(2, -3, by = -.1)
+lasso_alc <- cv.glmnet(x = case_matrix, y = y_alc, alpha = 1, lambda = lambdas)
+lamb_alc <- lasso_alc$lambda.min
+lasso_alc <- glmnet(x = case_matrix, y = y_alc, alpha = 1, lambda = lamb_alc)
+
+lasso_alc_coef <- data.frame(coef.name = dimnames(coef(lasso_alc))[[1]], coef.value = matrix(coef(lasso_alc)))
+lasso_alc_coef
 ```
 
 
