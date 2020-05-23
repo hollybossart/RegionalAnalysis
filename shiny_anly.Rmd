@@ -44,7 +44,7 @@ geo_final <-
 
 ```{r}
 # launch SpatialEpiApp
-# run_app()
+run_app()
 ```
 
 ```{r}

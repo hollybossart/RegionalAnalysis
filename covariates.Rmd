@@ -1,0 +1,79 @@
+---
+title: "Demographics"
+output: html_notebook
+---
+
+```{r}
+# libraries
+library(data.table)
+library(tidyverse)
+library(mosaic)
+
+# load data
+main_raw <- 
+  fread("ukrmain_RU_061419.csv")
+
+demo_raw <-
+  fread("ukraine_dem.csv")
+```
+
+```{r}
+# data wrangling
+main <-
+  main_raw %>%
+  # mental conditions
+  mutate(anx = ifelse(DSM_AGO == 1|DSM_SO == 1|DSM_GAD == 1|DSM_PDS == 1, 1, 0),
+         ied = ifelse(DSM_IEDH == 1, 1, 0),
+         aff = ifelse(DSM_MDE == 1|DSM_DYS == 1, 1, 0),
+         alc = ifelse(DSM_ALA == 1|DSM_ALD == 1, 1, 0),
+         any = ifelse(anx == 1|ied == 1|aff == 1|alc == 1, 1, 0),
+         Oblast = derivedVariable("Crimea" = io15 == 1,
+                                "Kiev City" = io15 == 2,
+                                "Kiev" = io15 == 3,
+                                "Vinnytsya" = io15 == 4,
+                                "Volyn" = io15 == 5,
+                                "Dnipropetrovs'k" = io15 == 6,
+                                "Donets'k" = io15 == 7,
+                                "Zhytomyr" = io15 == 8,
+                                "Transcarpathia" = io15 == 9,
+                                "Zaporizhzhya" = io15 == 10,
+                                "Ivano-Frankivs'k" = io15 == 11,
+                                "Kirovohrad" = io15 == 12,
+                                "Luhans'k" = io15 == 13,
+                                "L'viv" = io15 == 14,
+                                "Mykolayiv" = io15 == 15,
+                                "Odessa" = io15 == 16,
+                                "Poltava" = io15 == 17,
+                                "Rivne" = io15 == 18,
+                                "Sumy" = io15 == 19,
+                                "Ternopil'" = io15 == 20,
+                                "Kharkiv" = io15 == 21,
+                                "Kherson" = io15 == 22,
+                                "Khmel'nyts'kyy" = io15 == 23,
+                                "Cherkasy" = io15 == 24,
+                                "Chernihiv" = io15 == 25,
+                                "Chernivtsi" = io15 == 26)) %>%
+  select(sampleid, anx, ied, aff, alc, any, Oblast)
+
+dem <-
+  demo_raw %>%
+  select(sampleid, SEX, agecat_wmh, educat, income_cat, emp)
+
+full <-
+  left_join(main, dem, by = "sampleid")
+
+case <-
+  full %>%
+  group_by(Oblast, SEX, agecat_wmh) %>%
+  summarize(totalpop = n(),
+            anx = sum(anx),
+            ied = sum(ied),
+            aff = sum(aff),
+            alc = sum(alc),
+            any = sum(any)) %>%
+  mutate(anx_prop = anx/totalpop,
+         ied_prop = ied/totalpop,
+         aff_prop = aff/totalpop,
+         alc_prop = alc/totalpop,
+         any_prop = any/totalpop)
+```
