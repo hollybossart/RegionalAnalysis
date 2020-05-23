@@ -64,16 +64,21 @@ full <-
 
 case <-
   full %>%
+  mutate(Oblast = str_replace_all(Oblast, "[^[:alnum:]]", "")) %>%
   group_by(Oblast, SEX, agecat_wmh) %>%
-  summarize(totalpop = n(),
-            anx = sum(anx),
+  summarize(anx = sum(anx),
             ied = sum(ied),
             aff = sum(aff),
             alc = sum(alc),
-            any = sum(any)) %>%
-  mutate(anx_prop = anx/totalpop,
-         ied_prop = ied/totalpop,
-         aff_prop = aff/totalpop,
-         alc_prop = alc/totalpop,
-         any_prop = any/totalpop)
+            any = sum(any)) 
+
+
+population <-
+  full %>%
+  mutate(Oblast = str_replace_all(Oblast, "[^[:alnum:]]", "")) %>%
+  group_by(Oblast, SEX, agecat_wmh) %>%
+  summarize(population = n())
+  
+fwrite(case, "case_covariate.csv")
+fwrite(population, "pop_covariate.csv")
 ```
