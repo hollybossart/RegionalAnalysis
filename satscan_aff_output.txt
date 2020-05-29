@@ -4,7 +4,7 @@
                                  _____________________________
 
 
-Program run on: Sat May 23 15:44:33 2020
+Program run on: Fri May 29 12:52:15 2020
 
 Purely Spatial analysis
 scanning for clusters with high rates
@@ -16,8 +16,8 @@ SUMMARY OF DATA
 Study period.......................: 2000/1/1 to 2000/12/31
 Number of locations................: 26
 Population, averaged over time.....: 4725
-Total number of cases..............: 355
-Annual cases / 100000..............: 7497.7
+Total number of cases..............: 814
+Annual cases / 100000..............: 17191.9
 _______________________________________________________________________________________________
 
 CLUSTERS DETECTED
@@ -27,65 +27,91 @@ CLUSTERS DETECTED
   Coordinates / radius..: (49.618818 N, 36.444672 E) / 0 km
   Gini Cluster..........: Yes
   Population............: 296
-  Number of cases.......: 88
-  Expected cases........: 22.93
-  Annual cases / 100000.: 28771.9
-  Observed / expected...: 3.84
-  Relative risk.........: 4.77
-  Log likelihood ratio..: 60.112460
+  Number of cases.......: 152
+  Expected cases........: 54.82
+  Annual cases / 100000.: 47669.5
+  Observed / expected...: 2.77
+  Relative risk.........: 3.18
+  Log likelihood ratio..: 64.340286
   P-value...............: < 0.00000000000000001
 
-2.Location IDs included.: Zhytomyr
-  Overlap with clusters.: No Overlap
+2.Location IDs included.: KievCity, Kiev, Chernihiv, Cherkasy, Zhytomyr
+  Overlap with clusters.: 3, 4
+  Coordinates / radius..: (50.450142 N, 30.551970 E) / 152.96 km
+  Gini Cluster..........: No
+  Population............: 794
+  Number of cases.......: 191
+  Expected cases........: 133.48
+  Annual cases / 100000.: 24600.2
+  Observed / expected...: 1.43
+  Relative risk.........: 1.56
+  Log likelihood ratio..: 13.421818
+  P-value...............: 0.000020
+
+3.Location IDs included.: Zhytomyr
+  Overlap with clusters.: 2
   Coordinates / radius..: (50.660138 N, 28.410725 E) / 0 km
   Gini Cluster..........: Yes
   Population............: 136
-  Number of cases.......: 28
-  Expected cases........: 10.63
-  Annual cases / 100000.: 19743.9
-  Observed / expected...: 2.63
-  Relative risk.........: 2.77
-  Log likelihood ratio..: 10.189419
-  P-value...............: 0.00034
+  Number of cases.......: 49
+  Expected cases........: 24.09
+  Annual cases / 100000.: 34973.6
+  Observed / expected...: 2.03
+  Relative risk.........: 2.10
+  Log likelihood ratio..: 10.281539
+  P-value...............: 0.00042
 
-3.Location IDs included.: Mykolayiv, Kirovohrad
-  Overlap with clusters.: No Overlap
-  Coordinates / radius..: (47.388430 N, 31.966877 E) / 127.36 km
-  Gini Cluster..........: No
-  Population............: 249
-  Number of cases.......: 35
-  Expected cases........: 19.57
-  Annual cases / 100000.: 13409.0
-  Observed / expected...: 1.79
-  Relative risk.........: 1.87
-  Log likelihood ratio..: 5.277466
-  P-value...............: 0.054
+4.Location IDs included.: KievCity, Kiev, Chernihiv
+  Overlap with clusters.: 2
+  Coordinates / radius..: (50.450142 N, 30.551970 E) / 137.17 km
+  Gini Cluster..........: Yes
+  Population............: 523
+  Number of cases.......: 122
+  Expected cases........: 86.92
+  Annual cases / 100000.: 24129.6
+  Observed / expected...: 1.40
+  Relative risk.........: 1.47
+  Log likelihood ratio..: 7.141071
+  P-value...............: 0.011
 
-4.Location IDs included.: Kiev
-  Overlap with clusters.: No Overlap
-  Coordinates / radius..: (49.995278 N, 30.330974 E) / 0 km
-  Gini Cluster..........: No
-  Population............: 185
-  Number of cases.......: 19
-  Expected cases........: 13.52
-  Annual cases / 100000.: 10535.9
-  Observed / expected...: 1.41
-  Relative risk.........: 1.43
-  Log likelihood ratio..: 1.028912
-  P-value...............: 0.979
+5.Location IDs included.: Zaporizhzhya
+  Overlap with clusters.: 6
+  Coordinates / radius..: (47.255934 N, 35.773186 E) / 0 km
+  Gini Cluster..........: Yes
+  Population............: 182
+  Number of cases.......: 53
+  Expected cases........: 30.88
+  Annual cases / 100000.: 29502.9
+  Observed / expected...: 1.72
+  Relative risk.........: 1.77
+  Log likelihood ratio..: 6.822092
+  P-value...............: 0.015
 
-5.Location IDs included.: KievCity
-  Overlap with clusters.: No Overlap
-  Coordinates / radius..: (50.450142 N, 30.551970 E) / 0 km
+6.Location IDs included.: Crimea, Kherson, Zaporizhzhya
+  Overlap with clusters.: 5
+  Coordinates / radius..: (45.378373 N, 34.118290 E) / 244.25 km
   Gini Cluster..........: No
-  Population............: 247
-  Number of cases.......: 24
-  Expected cases........: 18.91
-  Annual cases / 100000.: 9516.2
-  Observed / expected...: 1.27
-  Relative risk.........: 1.29
-  Log likelihood ratio..: 0.669655
-  P-value...............: 0.999
+  Population............: 522
+  Number of cases.......: 105
+  Expected cases........: 89.90
+  Annual cases / 100000.: 20079.5
+  Observed / expected...: 1.17
+  Relative risk.........: 1.19
+  Log likelihood ratio..: 1.361095
+  P-value...............: 0.925
+
+7.Location IDs included.: Ternopil, Khmelnytskyy, IvanoFrankivsk
+  Overlap with clusters.: No Overlap
+  Coordinates / radius..: (49.418234 N, 25.621058 E) / 105.15 km
+  Gini Cluster..........: No
+  Population............: 364
+  Number of cases.......: 70
+  Expected cases........: 59.79
+  Annual cases / 100000.: 20128.8
+  Observed / expected...: 1.17
+  Relative risk.........: 1.19
+  Log likelihood ratio..: 0.896048
+  P-value...............: 0.994
 _______________________________________________________________________________________________
 
 PARAMETER SETTINGS
@@ -108,8 +134,8 @@ Analysis
 
 Output
 ------
-  Main Results File : D:\Dordt REU\UkraineRegionAnalysis\RegionalAnalysis\satscan_covariate_output.txt
-  Google Maps File  : D:\Dordt REU\UkraineRegionAnalysis\RegionalAnalysis\satscan_covariate_output.clustermap.html
+  Main Results File : D:\Dordt REU\UkraineRegionAnalysis\RegionalAnalysis\satscan_aff_output.txt
+  Google Maps File  : D:\Dordt REU\UkraineRegionAnalysis\RegionalAnalysis\satscan_aff_output.clustermap.html
 
 Data Checking
 -------------
@@ -169,6 +195,6 @@ Run Options
   Logging Analysis  : No
 _______________________________________________________________________________________________
 
-Program completed  : Sat May 23 15:44:33 2020
+Program completed  : Fri May 29 12:52:15 2020
 Total Running Time : 0 seconds
 Processor Usage    : 12 processors
