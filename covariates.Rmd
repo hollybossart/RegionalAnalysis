@@ -79,6 +79,6 @@ population <-
   group_by(Oblast, SEX, agecat_wmh) %>%
   summarize(population = n())
   
-fwrite(case, "case_covariate.csv")
-fwrite(population, "pop_covariate.csv")
+fwrite(case, "satscaninputs/case_covariate.csv")
+fwrite(population, "satSCANinputs/pop_covariate.csv")
 ```
