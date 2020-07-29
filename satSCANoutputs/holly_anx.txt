@@ -4,7 +4,7 @@
                                  _____________________________
 
 
-Program run on: Mon Jul 06 14:30:44 2020
+Program run on: Thu Jul 23 17:49:32 2020
 
 Purely Spatial analysis
 scanning for clusters with high or low rates
@@ -148,13 +148,8 @@ Analysis
 
 Output
 ------
-  Main Results File       : C:\Users\12088\Dropbox\UkraineREU2019\Regions\satSCANoutputs\holly_anx.txt
-  Cluster File            : C:\Users\12088\Dropbox\UkraineREU2019\Regions\satSCANoutputs\holly_anx.col.txt
-  Google Maps File        : C:\Users\12088\Dropbox\UkraineREU2019\Regions\satSCANoutputs\holly_anx.clustermap.html
-  Stratified Cluster File : C:\Users\12088\Dropbox\UkraineREU2019\Regions\satSCANoutputs\holly_anx.clustermap.sci.txt
-  Location File           : C:\Users\12088\Dropbox\UkraineREU2019\Regions\satSCANoutputs\holly_anx.clustermap.gis.txt
-  Risk Estimates File     : C:\Users\12088\Dropbox\UkraineREU2019\Regions\satSCANoutputs\holly_anx.clustermap.rr.txt
-  Simulated LLRs File     : C:\Users\12088\Dropbox\UkraineREU2019\Regions\satSCANoutputs\holly_anx.clustermap.llr.txt
+  Main Results File : C:\Users\12088\Dropbox\UkraineREU2019\Regions\satSCANoutputs\holly_anx.txt
+  Google Maps File  : C:\Users\12088\Dropbox\UkraineREU2019\Regions\satSCANoutputs\holly_anx.clustermap.html
 
 Data Checking
 -------------
@@ -205,9 +200,8 @@ Spatial Output
 
 Other Output
 ------------
-  Report Critical Values     : No
-  Report Monte Carlo Rank    : No
-  Print ASCII Column Headers : No
+  Report Critical Values  : No
+  Report Monte Carlo Rank : No
 
 Run Options
 -----------
@@ -216,6 +210,6 @@ Run Options
   Logging Analysis  : No
 _______________________________________________________________________________________________
 
-Program completed  : Mon Jul 06 14:30:45 2020
+Program completed  : Thu Jul 23 17:49:33 2020
 Total Running Time : 1 second
 Processor Usage    : 12 processors

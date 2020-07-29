@@ -4,10 +4,10 @@
                                  _____________________________
 
 
-Program run on: Mon Jul 06 15:22:01 2020
+Program run on: Mon Jul 06 16:28:36 2020
 
 Purely Spatial analysis
-scanning for clusters with high or low rates
+scanning for clusters with high rates
 using the Discrete Poisson model.
 _______________________________________________________________________________________________
 
@@ -35,22 +35,8 @@ CLUSTERS DETECTED
   Log likelihood ratio..: 64.340286
   P-value...............: < 0.00000000000000001
 
-2.Location IDs included.: IvanoFrankivsk, Transcarpathia, Ternopil, Chernivtsi, Lviv,
-                          Khmelnytskyy, Volyn, Vinnytsya, Rivne
-  Overlap with clusters.: 4, 8, 12, 13, 15
-  Coordinates / radius..: (48.769089 N, 24.569663 E) / 291.88 km
-  Gini Cluster..........: No
-  Population............: 1250
-  Number of cases.......: 138
-  Expected cases........: 209.29
-  Annual cases / 100000.: 11336.0
-  Observed / expected...: 0.66
-  Relative risk.........: 0.59
-  Log likelihood ratio..: 17.862069
-  P-value...............: 0.0000014
-
-3.Location IDs included.: KievCity, Kiev, Chernihiv, Cherkasy, Zhytomyr
-  Overlap with clusters.: 6, 10
+2.Location IDs included.: KievCity, Kiev, Chernihiv, Cherkasy, Zhytomyr
+  Overlap with clusters.: 3, 4
   Coordinates / radius..: (50.450142 N, 30.551970 E) / 152.96 km
   Gini Cluster..........: No
   Population............: 794
@@ -60,36 +46,10 @@ CLUSTERS DETECTED
   Observed / expected...: 1.43
   Relative risk.........: 1.56
   Log likelihood ratio..: 13.421818
-  P-value...............: 0.000074
+  P-value...............: 0.000020
 
-4.Location IDs included.: Rivne, Volyn
+3.Location IDs included.: Zhytomyr
   Overlap with clusters.: 2
-  Coordinates / radius..: (51.055490 N, 26.578138 E) / 123.12 km
-  Gini Cluster..........: Yes
-  Population............: 226
-  Number of cases.......: 11
-  Expected cases........: 36.28
-  Annual cases / 100000.: 5212.3
-  Observed / expected...: 0.30
-  Relative risk.........: 0.29
-  Log likelihood ratio..: 12.560425
-  P-value...............: 0.00016
-
-5.Location IDs included.: Donetsk
-  Overlap with clusters.: No Overlap
-  Coordinates / radius..: (48.016262 N, 37.774319 E) / 0 km
-  Gini Cluster..........: Yes
-  Population............: 500
-  Number of cases.......: 48
-  Expected cases........: 86.26
-  Annual cases / 100000.: 9566.6
-  Observed / expected...: 0.56
-  Relative risk.........: 0.53
-  Log likelihood ratio..: 11.112395
-  P-value...............: 0.00059
-
-6.Location IDs included.: Zhytomyr
-  Overlap with clusters.: 3
   Coordinates / radius..: (50.660138 N, 28.410725 E) / 0 km
   Gini Cluster..........: Yes
   Population............: 136
@@ -99,124 +59,59 @@ CLUSTERS DETECTED
   Observed / expected...: 2.03
   Relative risk.........: 2.10
   Log likelihood ratio..: 10.281539
-  P-value...............: 0.0013
+  P-value...............: 0.00042
 
-7.Location IDs included.: Sumy
-  Overlap with clusters.: No Overlap
-  Coordinates / radius..: (51.049191 N, 34.036543 E) / 0 km
-  Gini Cluster..........: Yes
-  Population............: 136
-  Number of cases.......: 6
-  Expected cases........: 23.60
-  Annual cases / 100000.: 4370.0
-  Observed / expected...: 0.25
-  Relative risk.........: 0.25
-  Log likelihood ratio..: 9.581097
-  P-value...............: 0.0024
-
-8.Location IDs included.: Transcarpathia
+4.Location IDs included.: KievCity, Kiev, Chernihiv
   Overlap with clusters.: 2
-  Coordinates / radius..: (48.411377 N, 23.291637 E) / 0 km
+  Coordinates / radius..: (50.450142 N, 30.551970 E) / 137.17 km
   Gini Cluster..........: Yes
-  Population............: 114
-  Number of cases.......: 4
-  Expected cases........: 19.81
-  Annual cases / 100000.: 3471.3
-  Observed / expected...: 0.20
-  Relative risk.........: 0.20
-  Log likelihood ratio..: 9.567207
-  P-value...............: 0.0024
+  Population............: 523
+  Number of cases.......: 122
+  Expected cases........: 86.92
+  Annual cases / 100000.: 24129.6
+  Observed / expected...: 1.40
+  Relative risk.........: 1.47
+  Log likelihood ratio..: 7.141071
+  P-value...............: 0.011
 
-9.Location IDs included.: Odessa, Mykolayiv
+5.Location IDs included.: Zaporizhzhya
+  Overlap with clusters.: 6
+  Coordinates / radius..: (47.255934 N, 35.773186 E) / 0 km
+  Gini Cluster..........: Yes
+  Population............: 182
+  Number of cases.......: 53
+  Expected cases........: 30.88
+  Annual cases / 100000.: 29502.9
+  Observed / expected...: 1.72
+  Relative risk.........: 1.77
+  Log likelihood ratio..: 6.822092
+  P-value...............: 0.015
+
+6.Location IDs included.: Crimea, Kherson, Zaporizhzhya
+  Overlap with clusters.: 5
+  Coordinates / radius..: (45.378373 N, 34.118290 E) / 244.25 km
+  Gini Cluster..........: No
+  Population............: 522
+  Number of cases.......: 105
+  Expected cases........: 89.90
+  Annual cases / 100000.: 20079.5
+  Observed / expected...: 1.17
+  Relative risk.........: 1.19
+  Log likelihood ratio..: 1.361095
+  P-value...............: 0.925
+
+7.Location IDs included.: Ternopil, Khmelnytskyy, IvanoFrankivsk
   Overlap with clusters.: No Overlap
-  Coordinates / radius..: (47.257638 N, 30.211073 E) / 133.05 km
-  Gini Cluster..........: Yes
+  Coordinates / radius..: (49.418234 N, 25.621058 E) / 105.15 km
+  Gini Cluster..........: No
   Population............: 364
-  Number of cases.......: 36
-  Expected cases........: 64.90
-  Annual cases / 100000.: 9535.9
-  Observed / expected...: 0.55
-  Relative risk.........: 0.53
-  Log likelihood ratio..: 8.236082
-  P-value...............: 0.013
-
-10.Location IDs included.: KievCity, Kiev, Chernihiv
-   Overlap with clusters.: 3
-   Coordinates / radius..: (50.450142 N, 30.551970 E) / 137.17 km
-   Gini Cluster..........: Yes
-   Population............: 523
-   Number of cases.......: 122
-   Expected cases........: 86.92
-   Annual cases / 100000.: 24129.6
-   Observed / expected...: 1.40
-   Relative risk.........: 1.47
-   Log likelihood ratio..: 7.141071
-   P-value...............: 0.022
-
-11.Location IDs included.: Zaporizhzhya
-   Overlap with clusters.: No Overlap
-   Coordinates / radius..: (47.255934 N, 35.773186 E) / 0 km
-   Gini Cluster..........: Yes
-   Population............: 182
-   Number of cases.......: 53
-   Expected cases........: 30.88
-   Annual cases / 100000.: 29502.9
-   Observed / expected...: 1.72
-   Relative risk.........: 1.77
-   Log likelihood ratio..: 6.822092
-   P-value...............: 0.030
-
-12.Location IDs included.: Vinnytsya
-   Overlap with clusters.: 2
-   Coordinates / radius..: (49.233793 N, 28.479677 E) / 0 km
-   Gini Cluster..........: No
-   Population............: 159
-   Number of cases.......: 12
-   Expected cases........: 26.84
-   Annual cases / 100000.: 7685.6
-   Observed / expected...: 0.45
-   Relative risk.........: 0.44
-   Log likelihood ratio..: 5.320680
-   P-value...............: 0.092
-
-13.Location IDs included.: Chernivtsi
-   Overlap with clusters.: 2
-   Coordinates / radius..: (48.279644 N, 25.933146 E) / 0 km
-   Gini Cluster..........: No
-   Population............: 136
-   Number of cases.......: 13
-   Expected cases........: 25.93
-   Annual cases / 100000.: 8619.3
-   Observed / expected...: 0.50
-   Relative risk.........: 0.49
-   Log likelihood ratio..: 4.059378
-   P-value...............: 0.270
-
-14.Location IDs included.: Dnipropetrovsk
-   Overlap with clusters.: No Overlap
-   Coordinates / radius..: (48.459903 N, 35.000339 E) / 0 km
-   Gini Cluster..........: No
-   Population............: 341
-   Number of cases.......: 43
-   Expected cases........: 58.31
-   Annual cases / 100000.: 12677.0
-   Observed / expected...: 0.74
-   Relative risk.........: 0.72
-   Log likelihood ratio..: 2.368574
-   P-value...............: 0.798
-
-15.Location IDs included.: Lviv
-   Overlap with clusters.: 2
-   Coordinates / radius..: (49.841129 N, 24.045140 E) / 0 km
-   Gini Cluster..........: No
-   Population............: 251
-   Number of cases.......: 28
-   Expected cases........: 40.64
-   Annual cases / 100000.: 11846.0
-   Observed / expected...: 0.69
-   Relative risk.........: 0.68
-   Log likelihood ratio..: 2.310017
-   P-value...............: 0.814
+  Number of cases.......: 70
+  Expected cases........: 59.79
+  Annual cases / 100000.: 20128.8
+  Observed / expected...: 1.17
+  Relative risk.........: 1.19
+  Log likelihood ratio..: 0.896048
+  P-value...............: 0.994
 _______________________________________________________________________________________________
 
 PARAMETER SETTINGS
@@ -224,28 +119,23 @@ PARAMETER SETTINGS
 Input
 -----
   Case File        : C:\Users\12088\Dropbox\UkraineREU2019\Regions\satSCANinputs\case_covariate.csv
-  Population File  : C:\Users\12088\Dropbox\UkraineREU2019\Regions\satSCANinputs\pop_covariate.csv
+  Population File  : C:\Users\12088\Dropbox\UkraineREU2019\Regions\satSCANinputs\Population.pop
   Time Precision   : None
   Start Time       : 2000/1/1
   End Time         : 2000/12/31
-  Coordinates File : C:\Users\12088\Dropbox\UkraineREU2019\Regions\satSCANinputs\coord_file.csv
+  Coordinates File : C:\Users\12088\Dropbox\UkraineREU2019\Regions\satSCANinputs\Coordinates.geo
   Coordinates      : Latitude/Longitude
 
 Analysis
 --------
   Type of Analysis    : Purely Spatial
   Probability Model   : Discrete Poisson
-  Scan for Areas with : High or Low Rates
+  Scan for Areas with : High Rates
 
 Output
 ------
-  Main Results File       : C:\Users\12088\Dropbox\UkraineREU2019\Regions\satSCANoutputs\holly_aff.txt
-  Cluster File            : C:\Users\12088\Dropbox\UkraineREU2019\Regions\satSCANoutputs\holly_aff.col.txt
-  Google Maps File        : C:\Users\12088\Dropbox\UkraineREU2019\Regions\satSCANoutputs\holly_aff.clustermap.html
-  Stratified Cluster File : C:\Users\12088\Dropbox\UkraineREU2019\Regions\satSCANoutputs\holly_aff.clustermap.sci.txt
-  Location File           : C:\Users\12088\Dropbox\UkraineREU2019\Regions\satSCANoutputs\holly_aff.clustermap.gis.txt
-  Risk Estimates File     : C:\Users\12088\Dropbox\UkraineREU2019\Regions\satSCANoutputs\holly_aff.clustermap.rr.txt
-  Simulated LLRs File     : C:\Users\12088\Dropbox\UkraineREU2019\Regions\satSCANoutputs\holly_aff.clustermap.llr.txt
+  Main Results File : C:\Users\12088\Dropbox\UkraineREU2019\Regions\satSCANoutputs\holly_aff.txt
+  Google Maps File  : C:\Users\12088\Dropbox\UkraineREU2019\Regions\satSCANoutputs\holly_aff.clustermap.html
 
 Data Checking
 -------------
@@ -268,7 +158,6 @@ Cluster Restrictions
 --------------------
   Minimum Cases in Cluster for High Rates : 2
   Restrict High Rate Clusters             : No
-  Restrict Low Rate Clusters              : No
 
 Space And Time Adjustments
 --------------------------
@@ -296,9 +185,8 @@ Spatial Output
 
 Other Output
 ------------
-  Report Critical Values     : No
-  Report Monte Carlo Rank    : No
-  Print ASCII Column Headers : No
+  Report Critical Values  : No
+  Report Monte Carlo Rank : No
 
 Run Options
 -----------
@@ -307,6 +195,6 @@ Run Options
   Logging Analysis  : No
 _______________________________________________________________________________________________
 
-Program completed  : Mon Jul 06 15:22:02 2020
-Total Running Time : 1 second
+Program completed  : Mon Jul 06 16:28:36 2020
+Total Running Time : 0 seconds
 Processor Usage    : 12 processors
