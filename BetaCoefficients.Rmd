@@ -431,7 +431,7 @@ environment <-
                                 "Chernivtsi" = rowname == 26,
                                 "Sevastopol'" = rowname == 27),
          # fix sevastopol to take on crimea values since row 27 is avg across ukraine
-         air_concern = ifelse(Oblast == "Sevastopol'", air_concernt[1], air_concern)) %>%
+         air_concern = ifelse(Oblast == "Sevastopol'", air_concern[1], air_concern)) %>%
   arrange(Oblast) %>%
   select(Oblast, air_concern)
 
