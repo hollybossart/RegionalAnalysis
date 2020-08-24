@@ -4,7 +4,7 @@
                                  _____________________________
 
 
-Program run on: Mon Aug 24 19:30:27 2020
+Program run on: Sun Aug 02 13:53:54 2020
 
 Purely Spatial analysis
 scanning for clusters with high or low rates
@@ -132,8 +132,8 @@ PARAMETER SETTINGS
 
 Input
 -----
-  Case File        : C:\Users\12088\Dropbox\UkraineREU2019\Regions\satSCANinputs\case_covariate.csv
-  Population File  : C:\Users\12088\Dropbox\UkraineREU2019\Regions\satSCANinputs\pop_covariate.csv
+  Case File        : C:\Users\12088\Dropbox\UkraineREU2019\Regions\satSCANinputs\anxCases.cas
+  Population File  : C:\Users\12088\Dropbox\UkraineREU2019\Regions\satSCANinputs\Population.pop
   Time Precision   : None
   Start Time       : 2000/1/1
   End Time         : 2000/12/31
@@ -148,10 +148,8 @@ Analysis
 
 Output
 ------
-  Main Results File : C:\Users\12088\Dropbox\UkraineREU2019\Regions\satSCANoutputs\anx.txt
-  Google Maps File  : C:\Users\12088\Dropbox\UkraineREU2019\Regions\satSCANoutputs\anx.clustermap.html
-  Shapefile         : C:\Users\12088\Dropbox\UkraineREU2019\Regions\satSCANoutputs\anx.clustermap.col.shp
-  Cluster File      : C:\Users\12088\Dropbox\UkraineREU2019\Regions\satSCANoutputs\anx.clustermap.col.dbf
+  Main Results File : C:\Users\12088\Dropbox\UkraineREU2019\Regions\satSCANoutputs\holly_anx.txt
+  Google Maps File  : C:\Users\12088\Dropbox\UkraineREU2019\Regions\satSCANoutputs\holly_anx.clustermap.html
 
 Data Checking
 -------------
@@ -212,6 +210,6 @@ Run Options
   Logging Analysis  : No
 _______________________________________________________________________________________________
 
-Program completed  : Mon Aug 24 19:30:27 2020
+Program completed  : Sun Aug 02 13:53:54 2020
 Total Running Time : 0 seconds
 Processor Usage    : 12 processors
