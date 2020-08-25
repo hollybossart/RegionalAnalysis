@@ -11,104 +11,80 @@ library(tidyverse)
 
 ```{r results = FALSE, include = FALSE}
 # read data
-aff_nocov <-
-  st_read("satSCANoutputs/aff_nocov.col.shp")
-alc_nocov <-
-  st_read("satSCANoutputs/alcohol_nocov.col.shp")
+# aff_nocov <-
+#   st_read("satSCANoutputs/aff_nocov.col.shp")
+# alc_nocov <-
+#   st_read("satSCANoutputs/alcohol_nocov.col.shp")
 anx <-
   st_read("satSCANoutputs/anx.col.shp")
-ied <-
-  st_read("satSCANoutputs/ied.col.shp")
+# ied <-
+#   st_read("satSCANoutputs/ied.col.shp")
 ukroblast <-
   st_read("ukraineGIS/gadm36_UKR_1.shp")
 ```
 
 ```{r}
-# wrangle data
+# anxiety map
 ukroblast1 <-
   ukroblast %>%
   mutate(LOC_ID = as.factor(str_replace_all(NAME_1, "[^[:alnum:]]", "")))
 
-aff_nocov_ind <-
-  aff_nocov %>%
-  mutate(RISK = ifelse(REL_RISK > 1, "High", "Low"))
-
-alc_nocov_ind <-
-  alc_nocov %>%
-  mutate(RISK = ifelse(REL_RISK > 1, "High", "Low"))
-
 anx_ind <-
   anx %>%
-  mutate(RISK = ifelse(REL_RISK > 1, "High", "Low"))
-
-ied_ind <-
-  ied %>%
   mutate(RISK = ifelse(REL_RISK > 1, "High", "Low")) %>%
-  rename()
+  filter(GINI_CLUST == 'T')
 
 ukroblast_map <-
   ukroblast %>%
-  st_join(aff_nocov_ind, by = "LOC_ID") %>%
-  st_join(alc_nocov_ind, by = "LOC_ID") %>%
   st_join(anx_ind, by = "LOC_ID") %>%
-  st_join(ied_ind, by = "LOC_ID")
+  filter(!((NAME_1 == "Zhytomyr") & (RISK == "Low")))
 
-ukroblast_map <-
-  ukroblast1 %>%
-  st_join(aff_nocov_ind, join = st_intersects)
 ggplot(data = ukroblast_map, aes(fill = RISK)) +
   geom_sf() +
-  labs(title = "Affective Disorder Clusters") +
+  labs(title = "Anxiety Disorder Clusters") +
   theme(panel.grid.major = element_blank(), 
         panel.grid.minor = element_blank())
 
-  st_join(alc_nocov_ind) %>%
-  st_join(anx_ind) %>%
-  st_join(ied_ind)
+# view <- ukroblast_map %>%
+#   select(NAME_1, P_VALUE, REL_RISK, CLUSTER)
 ```
 
 
 ```{r}
-ggplot(data = ukroblast) +
-  geom_sf() + 
-  geom_sf(data = ied, aes(alpha = 0.00000001)) +
-  labs(title = "IED Clusters") +
-  theme(panel.grid.major = element_blank(), 
-        panel.grid.minor = element_blank(),
-        legend.position = "none")
+# ggplot(data = ukroblast) +
+#   geom_sf() + 
+#   geom_sf(data = ied, aes(alpha = 0.00000001)) +
+#   labs(title = "IED Clusters") +
+#   theme(panel.grid.major = element_blank(), 
+#         panel.grid.minor = element_blank(),
+#         legend.position = "none")
+# 
+# ggplot(data = ukroblast) +
+#   geom_sf() + 
+#   geom_sf(data = aff_nocov, aes(alpha = 0.00000001)) +
+#   labs(title = "Affective Disorders Clusters") +
+#   theme(panel.grid.major = element_blank(), 
+#         panel.grid.minor = element_blank(),
+#         legend.position = "none")
+# 
+# ggplot(data = ukroblast) +
+#   geom_sf() + 
+#   geom_sf(data = alc_nocov, aes(alpha = 0.00000001)) +
+#   labs(title = "Alcohol Disorder Clusters") +
+#   theme(panel.grid.major = element_blank(), 
+#         panel.grid.minor = element_blank(),
+#         legend.position = "none")
 
 ggplot(data = ukroblast) +
   geom_sf() + 
-  geom_sf(data = aff_nocov, aes(alpha = 0.00000001)) +
-  labs(title = "Affective Disorders Clusters") +
-  theme(panel.grid.major = element_blank(), 
-        panel.grid.minor = element_blank(),
-        legend.position = "none")
-
-ggplot(data = ukroblast) +
-  geom_sf() + 
-  geom_sf(data = alc_nocov, aes(alpha = 0.00000001)) +
-  labs(title = "Alcohol Disorder Clusters") +
-  theme(panel.grid.major = element_blank(), 
-        panel.grid.minor = element_blank(),
-        legend.position = "none")
-
-ggplot(data = ukroblast) +
-  geom_sf() + 
-  geom_sf(data = anx, aes(alpha = 0.00000001)) +
+  geom_sf(data = anx_ind, aes(alpha = 0.00000001)) +
   labs(title = "Anxiety Disorders Clusters") +
   theme(panel.grid.major = element_blank(), 
         panel.grid.minor = element_blank(),
         legend.position = "none")
 ```
 
-```{r}
-ggplot(data = ukroblast_map, aes(fill = RISK)) +
-  geom_sf() +
-  labs(title = "Affective Disorder Clusters") +
-  theme(panel.grid.major = element_blank(), 
-        panel.grid.minor = element_blank())
-```
+
 
 
 
