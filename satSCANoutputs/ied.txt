@@ -1,0 +1,214 @@
+                                 _____________________________
+
+                                         SaTScan v9.6
+                                 _____________________________
+
+
+Program run on: Thu Sep 10 17:23:53 2020
+
+Purely Spatial analysis
+scanning for clusters with high or low rates
+using the Discrete Poisson model.
+_______________________________________________________________________________________________
+
+SUMMARY OF DATA
+
+Study period.......................: 2000/1/1 to 2000/12/31
+Number of locations................: 26
+Population, averaged over time.....: 4725
+Total number of cases..............: 179
+Annual cases / 100000..............: 3780.5
+_______________________________________________________________________________________________
+
+CLUSTERS DETECTED
+
+1.Location IDs included.: Rivne
+  Overlap with clusters.: No Overlap
+  Coordinates / radius..: (51.055490 N, 26.578138 E) / 0 km
+  Gini Cluster..........: No
+  Population............: 113
+  Number of cases.......: 0
+  Expected cases........: 4.62
+  Annual cases / 100000.: 0
+  Observed / expected...: 0
+  Relative risk.........: 0
+  Log likelihood ratio..: 4.675886
+  P-value...............: 0.184
+
+2.Location IDs included.: Sumy, Poltava, Chernihiv
+  Overlap with clusters.: No Overlap
+  Coordinates / radius..: (51.049191 N, 34.036543 E) / 150.90 km
+  Gini Cluster..........: No
+  Population............: 386
+  Number of cases.......: 5
+  Expected cases........: 14.23
+  Annual cases / 100000.: 1328.1
+  Observed / expected...: 0.35
+  Relative risk.........: 0.33
+  Log likelihood ratio..: 4.256158
+  P-value...............: 0.272
+
+3.Location IDs included.: Kiev, KievCity
+  Overlap with clusters.: No Overlap
+  Coordinates / radius..: (49.995278 N, 30.330974 E) / 52.93 km
+  Gini Cluster..........: No
+  Population............: 432
+  Number of cases.......: 29
+  Expected cases........: 17.08
+  Annual cases / 100000.: 6418.7
+  Observed / expected...: 1.70
+  Relative risk.........: 1.83
+  Log likelihood ratio..: 3.881813
+  P-value...............: 0.349
+
+4.Location IDs included.: Crimea
+  Overlap with clusters.: No Overlap
+  Coordinates / radius..: (45.378373 N, 34.118290 E) / 0 km
+  Gini Cluster..........: No
+  Population............: 227
+  Number of cases.......: 18
+  Expected cases........: 9.01
+  Annual cases / 100000.: 7553.3
+  Observed / expected...: 2.00
+  Relative risk.........: 2.11
+  Log likelihood ratio..: 3.709449
+  P-value...............: 0.397
+
+5.Location IDs included.: Khmelnytskyy, Ternopil, Vinnytsya
+  Overlap with clusters.: No Overlap
+  Coordinates / radius..: (49.442444 N, 26.988927 E) / 110.40 km
+  Gini Cluster..........: No
+  Population............: 387
+  Number of cases.......: 9
+  Expected cases........: 14.87
+  Annual cases / 100000.: 2288.0
+  Observed / expected...: 0.61
+  Relative risk.........: 0.58
+  Log likelihood ratio..: 1.455017
+  P-value...............: 0.989
+
+6.Location IDs included.: IvanoFrankivsk
+  Overlap with clusters.: No Overlap
+  Coordinates / radius..: (48.769089 N, 24.569663 E) / 0 km
+  Gini Cluster..........: No
+  Population............: 136
+  Number of cases.......: 10
+  Expected cases........: 5.86
+  Annual cases / 100000.: 6447.8
+  Observed / expected...: 1.71
+  Relative risk.........: 1.75
+  Log likelihood ratio..: 1.251893
+  P-value...............: 0.993
+
+NOTE: The sequential Monte Carlo procedure was used to terminate the calculations after 272
+replications.
+
+_______________________________________________________________________________________________
+
+Gini Indexes
+----------------------------------------------------------
+1 percent.............: 0
+2 percent.............: 0
+3 percent.............: 0
+4 percent.............: 0
+5 percent.............: 0
+6 percent.............: 0
+8 percent.............: 0
+10 percent............: 0
+12 percent............: 0
+15 percent............: 0
+20 percent............: 0
+25 percent............: 0
+30 percent............: 0
+40 percent............: 0
+50 percent............: 0
+Coefficients based on clusters with p<0.050.
+_______________________________________________________________________________________________
+
+PARAMETER SETTINGS
+
+Input
+-----
+  Case File        : C:\Users\12088\Dropbox\UkraineREU2019\Regions\satSCANinputs\case_covariate.csv
+  Population File  : C:\Users\12088\Dropbox\UkraineREU2019\Regions\satSCANinputs\pop_covariate.csv
+  Time Precision   : None
+  Start Time       : 2000/1/1
+  End Time         : 2000/12/31
+  Coordinates File : C:\Users\12088\Dropbox\UkraineREU2019\Regions\satSCANinputs\coord_file.csv
+  Coordinates      : Latitude/Longitude
+
+Analysis
+--------
+  Type of Analysis    : Purely Spatial
+  Probability Model   : Discrete Poisson
+  Scan for Areas with : High or Low Rates
+
+Output
+------
+  Main Results File : C:\Users\12088\Dropbox\UkraineREU2019\Regions\satSCANoutputs\ied.txt
+  Google Maps File  : C:\Users\12088\Dropbox\UkraineREU2019\Regions\satSCANoutputs\ied.clustermap.html
+  Shapefile         : C:\Users\12088\Dropbox\UkraineREU2019\Regions\satSCANoutputs\ied.clustermap.col.shp
+  Cluster File      : C:\Users\12088\Dropbox\UkraineREU2019\Regions\satSCANoutputs\ied.clustermap.col.dbf
+
+Data Checking
+-------------
+  Temporal Data Check     : Check to ensure that all cases and controls are within the specified temporal study period.
+  Geographical Data Check : Check to ensure that all observations (cases, controls and populations) are within the specified geographical area.
+
+Spatial Neighbors
+-----------------
+  Use Non-Euclidian Neighbors file : No
+  Use Meta Locations File          : No
+  Multiple Coordinates Type        : Allow only one set of coordinates per location ID.
+
+Spatial Window
+--------------
+  Maximum Spatial Cluster Size : 50 percent of population at risk
+  Window Shape                 : Circular
+  Isotonic Scan                : No
+
+Cluster Restrictions
+--------------------
+  Minimum Cases in Cluster for High Rates : 2
+  Restrict High Rate Clusters             : No
+  Restrict Low Rate Clusters              : No
+
+Space And Time Adjustments
+--------------------------
+  Adjust for known relative risks : No
+
+Inference
+---------
+  P-Value Reporting                  : Default Combination
+  Number of Replications             : 999
+  Adjusting for More Likely Clusters : No
+
+Border Analysis
+---------------
+  Report Oliveira's F : No
+
+Spatial Output
+--------------
+  Automatically Launch Map                  : Yes
+  Report Hierarchical Clusters              : Yes
+  Criteria for Reporting Secondary Clusters : No Geographical Overlap
+  Report Gini Optimized Cluster Collection  : Yes
+  Gini Index Based Collection Reporting     : Optimal Only
+  Report Gini Index Cluster Coefficents     : Yes
+  Restrict Reporting to Smaller Clusters    : No
+
+Other Output
+------------
+  Report Critical Values  : No
+  Report Monte Carlo Rank : No
+
+Run Options
+-----------
+  Processor Usage   : All Available Processors
+  Suppress Warnings : No
+  Logging Analysis  : No
+_______________________________________________________________________________________________
+
+Program completed  : Thu Sep 10 17:23:53 2020
+Total Running Time : 0 seconds
+Processor Usage    : 12 processors
